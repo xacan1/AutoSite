@@ -3,7 +3,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import CustomUser, Post
 
 
-class SendFeedbackForm(forms.Form):
+class SimpleForm(forms.Form):
+    pass
+
+
+class FeedbackForm(forms.Form):
     title = forms.CharField(max_length=100, label='Заголовок')
     text = forms.CharField(widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}), label='Текст сообщения')
     select = forms.ChoiceField(

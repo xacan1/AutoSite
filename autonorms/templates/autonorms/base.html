@@ -10,7 +10,7 @@
     <ul>
         {% for key, value in menu.items %}
         {% if user.is_authenticated and user.email == key %}
-        <li><a href="{% url 'profile' key %}">{{ key }}</a></li>
+        <li><a href="{% url 'profile' user.pk %}">{{ key }}</a></li>
         {% else %}
         <li><a href="{% url value %}">{{ key }}</a></li>
         {% endif %}

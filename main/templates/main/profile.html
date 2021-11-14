@@ -1,6 +1,48 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h1>{{ user.email }}</h1>
-<p>{{ user.company }}</p>
+{% if user.is_authenticated and user.pk == user_data.pk %}
+<h1>Профиль пользователя: {{ user_data.email }}</h1>
+<table>
+    <caption>Данные пользователя</caption>
+    <thead>
+    <tr>
+        <th>Параметр</th>
+        <th>Значение</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Email</td>
+        <td>{{ user_data.email }}</td>
+    </tr>
+    <tr>
+        <td>Организация</td>
+        <td>{{ user_data.company }}</td>
+    </tr>
+    <tr>
+        <td>Телефон</td>
+        <td>{{ user_data.phone }}</td>
+    </tr>
+    <tr>
+        <td>Последнее посещение</td>
+        <td>{{ user_data.last_login }}</td>
+    </tr>
+    <tr>
+        <td>Имя</td>
+        <td>{{ user_data.first_name }} {{ user_data.last_name }}</td>
+    </tr>
+    <tr>
+        <td>Дата регистрации</td>
+        <td>{{ user_data.date_joined }}</td>
+    </tr>
+    <tr>
+        <td>ИНН</td>
+        <td>{{ user_data.inn }}</td>
+    </tr>
+    </tbody>
+</table>
+{% else %}
+<p>Страницы с таким профилем не найдено! <a href="{% url 'home' %}">На главную</a></p>
+{% endif %}
 {% endblock content %}

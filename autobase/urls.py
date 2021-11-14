@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from main.urls import page_not_found
+from main.views import PageNotFound
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,4 +23,4 @@ urlpatterns = [
     path('', include('autonorms.urls')),
 ]
 
-handler404 = page_not_found
+handler404 = PageNotFound.as_view()
