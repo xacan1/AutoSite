@@ -1,5 +1,5 @@
 menu = {'На главную': 'home', 'О сайте': 'about', 'Добавить новость': 'add_post', 'Обратная связь': 'feedback',
-        'Автонормы': 'autonorms', 'Войти': 'login', 'Регистрация': 'registration'}
+        'Автонормы': 'autonorms', 'Войти': 'login', 'Регистрация': 'registration', 'Выйти': 'logout'}
 
 
 class DataMixin:
@@ -10,6 +10,7 @@ class DataMixin:
         if not self.request.user.is_authenticated:
             user_menu.pop('Обратная связь')
             user_menu.pop('Добавить новость')
+            user_menu.pop('Выйти')
         elif not self.request.user.is_staff:
             user_menu.pop('Добавить новость')
             user_menu[self.request.user.email] = 'profile'

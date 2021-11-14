@@ -8,6 +8,7 @@ urlpatterns = [
     path('show_post/<slug:post_slug>', ShowPost.as_view(), name='show_post'),
     path('registration/', RegisterUser.as_view(), name='registration'),
     path('feedback/', feedback, name='feedback'),
-    path('login/', login, name='login'),
-    path('profile/', profile, name='profile'),
+    path('login/', LoginUser.as_view(), name='login'),
+    path('logout/', LogoutUser.as_view(), name='logout'),
+    path('profile/<str:email>', ProfileUser.as_view(), name='profile'),
 ]

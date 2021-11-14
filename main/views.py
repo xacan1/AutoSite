@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import CustomUser, Post
-from .forms import AddPostForm, RegisterUserForm, SendFeedbackForm
+from .forms import AddPostForm, RegisterUserForm, SendFeedbackForm, LoginUserForm
 from .mixins import DataMixin, menu
 
 
@@ -50,12 +51,6 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
         return {**context, **c_def}
 
 
-def about(request):
-    template = 'main/about.html'
-    content = {'title': 'О сайте', 'menu': menu}
-    return render(request, template, content)
-
-
 def feedback(request):
     page = None
 
@@ -86,9 +81,36 @@ class RegisterUser(DataMixin, CreateView):
         return {**context, **c_def}
 
 
-def login(request):
-    return redirect('home')
+class LoginUser(DataMixin, LoginView):
+    form_class = LoginUserForm
+    template_name = 'main/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Авторизация')
+        return {**context, **c_def}
+
+    def get_success_url(self):
+        return reverse_lazy('home')
 
 
-def profile(request):
-    return redirect('home')
+class LogoutUser(LogoutView):
+    next_page = 'home'
+
+
+class ProfileUser(DataMixin, DetailView):
+    model = CustomUser
+    template_name = 'main/profile.html'
+    slug_url_kwarg = 'email'
+    context_object_name = 'user'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Профиль пользователя')
+        return {**context, **c_def}
+
+
+def about(request):
+    template = 'main/about.html'
+    content = {'title': 'О сайте', 'menu': menu}
+    return render(request, template, content)
