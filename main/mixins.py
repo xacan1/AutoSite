@@ -17,6 +17,7 @@ class DataMixin:
             user_menu.pop('Войти')
             user_menu.pop('Регистрация')
         else:
+            user_menu.pop('Обратная связь')
             user_menu[self.request.user.email] = 'profile'
             user_menu.pop('Войти')
             user_menu.pop('Регистрация')

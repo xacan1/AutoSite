@@ -44,7 +44,7 @@ class ShowPost(DataMixin, DetailView):
 class AddPost(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'main/add_post.html'
-    login_url = reverse_lazy('home')
+    login_url = reverse_lazy('login')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

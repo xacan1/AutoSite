@@ -4,7 +4,7 @@
 <h1>{{ title }}</h1>
 <ul>
     {% for modification in modifications %}
-    <li>{{ modification.name }} {{ modification.year }} {{ modification.year }} {{ modification.horsepower }} {{ modification.engine_code }}</li>
+    <li>{{ modification.name }} {{ modification.year }} {{ modification.horsepower }} {{ modification.engine_code }} {{ modification.car_body }}</li>
     {% endfor %}
 </ul>
 {% endblock content %}

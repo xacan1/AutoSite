@@ -12,7 +12,7 @@ class FeedbackForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}), label='Текст сообщения')
     select = forms.ChoiceField(
         choices=(
-            (1, 'Безнадежно'), (2, 'Плохо'), (3, 'Пойдет'), (4, 'Хорошо, но...'),
+            (1, 'Безнадежно'), (2, 'Плохо'), (3, 'Сойдет'), (4, 'Хорошо, но...'),
             (5, 'Отлично! Куда деньги закинуть?')),
         label='Оценка сайта')
 
