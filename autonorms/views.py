@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, RedirectView
 from .models import *
 from main.mixins import DataMixin
 
@@ -50,3 +50,51 @@ class ShowModification(LoginRequiredMixin, DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Модификации модели ' + current_model_name)
         return {**context, **c_def}
+
+
+class ShowEquipment(LoginRequiredMixin, RedirectView, DataMixin, ListView):
+    template_name = 'autonorms/equipments.html'
+    context_object_name = 'equipments'
+    login_url = reverse_lazy('login')
+    pattern_name = 'select_equipment'
+    # url = 'http://127.0.0.1:8000'
+
+    def get_queryset(self):
+        modification_pk = self.kwargs.get('modification_pk', 0)
+        result = Equipment.objects.filter(modification_id=modification_pk)
+
+        if not result:
+            self.get_redirect_url()
+
+        return result
+
+    def get_redirect_url(self, *args, **kwargs):
+        modification_pk = self.kwargs.get('modification_pk', 0)
+        result = Equipment.objects.filter(modification_id=modification_pk)
+        if not result:
+            return super().get_redirect_url(*args, **kwargs)
+
+
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        modification_pk = self.kwargs.get('modification_pk', 0)
+        current_modification_name = Modification.objects.get(pk=modification_pk).name if modification_pk else ''
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Комплектации')
+        return {**context, **c_def}
+
+
+# class GoToWorkTimes(RedirectView):
+#     permanent = True
+#     pattern_name = 'select_equipment'
+#     url = 'http://127.0.0.1:8000/'
+#
+#     def get_redirect_url(self, *args, **kwargs):
+#         return super().get_redirect_url(*args, **kwargs)
+
+
+class ShowWorkTimes(LoginRequiredMixin, DataMixin, ListView):
+    template_name = 'autonorms/work-times.html'
+    context_object_name = 'all_works'
+    login_url = reverse_lazy('login')

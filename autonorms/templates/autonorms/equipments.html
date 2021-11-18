@@ -1,0 +1,10 @@
+{% extends 'autonorms/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<ul>
+    {% for equipment in equipments %}
+    <li>{{ equipment.name }}</li>
+    {% endfor %}
+</ul>
+{% endblock content %}
