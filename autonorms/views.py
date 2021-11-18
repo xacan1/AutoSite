@@ -29,9 +29,11 @@ class ShowModels(LoginRequiredMixin, DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         brand_pk = self.kwargs.get('brand_pk', 0)
-        current_brand_name = Brand.objects.get(pk=brand_pk).name if brand_pk else ''
+        current_brand_name = Brand.objects.get(
+            pk=brand_pk).name if brand_pk else ''
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Модели автомобилей марки ' + current_brand_name)
+        c_def = self.get_user_context(
+            title='Модели автомобилей марки ' + current_brand_name)
         return {**context, **c_def}
 
 
@@ -46,9 +48,11 @@ class ShowModification(LoginRequiredMixin, DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         model_pk = self.kwargs.get('model_pk', 0)
-        current_model_name = Model.objects.get(pk=model_pk).name if model_pk else ''
+        current_model_name = Model.objects.get(
+            pk=model_pk).name if model_pk else ''
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Модификации модели ' + current_model_name)
+        c_def = self.get_user_context(
+            title='Модификации модели ' + current_model_name)
         return {**context, **c_def}
 
 
@@ -56,26 +60,27 @@ class ShowEquipment(LoginRequiredMixin, RedirectView, DataMixin, ListView):
     template_name = 'autonorms/equipments.html'
     context_object_name = 'equipments'
     login_url = reverse_lazy('login')
-    pattern_name = 'select_equipment'
+    # pattern_name = 'select_equipment'
     # url = 'http://127.0.0.1:8000'
 
     def get_queryset(self):
         modification_pk = self.kwargs.get('modification_pk', 0)
         result = Equipment.objects.filter(modification_id=modification_pk)
 
-        if not result:
-            self.get_redirect_url()
+        # if not result:
+        #     self.get_redirect_url()
 
         return result
 
-    def get_redirect_url(self, *args, **kwargs):
-        modification_pk = self.kwargs.get('modification_pk', 0)
-        result = Equipment.objects.filter(modification_id=modification_pk)
-        if not result:
-            return super().get_redirect_url(*args, **kwargs)
+    # def get_redirect_url(self, *args, **kwargs):
+    #     redirect_url = None
+    #     modification_pk = self.kwargs.get('modification_pk', 0)
+    #     result = Equipment.objects.filter(modification_id=modification_pk)
 
+    #     if not result:
+    #         redirect_url = super().get_redirect_url(*args, **kwargs)
 
-
+    #     return redirect_url
 
     def get_context_data(self, *, object_list=None, **kwargs):
         modification_pk = self.kwargs.get('modification_pk', 0)
