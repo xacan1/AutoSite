@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import reset_queries
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView
+from .forms import SimpleForm
 from .models import *
 from main.mixins import DataMixin
 
@@ -53,7 +54,6 @@ class ShowModification(LoginRequiredMixin, DataMixin, ListView):
             pk=model_pk).name if model_pk else ''
         context = super().get_context_data(**kwargs)
         qs = context.get('object_list')
-        # qs = object_list
         exists_equipment = qs and Equipment.objects.filter(
             modification_id=qs[0].pk)
         c_def = self.get_user_context(
@@ -76,9 +76,15 @@ class ShowEquipment(LoginRequiredMixin, DataMixin, ListView):
         return {**context, **c_def}
 
 
-class ShowWorkTimes(LoginRequiredMixin, DataMixin, ListView):
-    template_name = 'autonorms/work-times.html'
-    context_object_name = 'all_works'
+class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
+    form_class = SimpleForm
+    template_name = 'autonorms/work-order.html'
+    login_url = reverse_lazy('login')
+
+
+class ShowWorkGroups(LoginRequiredMixin, DataMixin, ListView):
+    template_name = 'autonorms/work_groups.html'
+    context_object_name = 'work_groups'
     login_url = reverse_lazy('login')
 
     def get_queryset(self):

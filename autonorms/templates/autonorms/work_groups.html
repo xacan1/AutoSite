@@ -1,0 +1,10 @@
+{% extends 'autonorms/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<ul>
+    {% for work_group in work_groups %}
+    <li>{{ work_group.name }}</li>
+    {% endfor %}
+</ul>
+{% endblock content %}
