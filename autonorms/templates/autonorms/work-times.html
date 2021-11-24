@@ -2,10 +2,5 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
-<h2>Тут по идее нужно приложение JS или показать дерево работ</h2>
-<ul>
-    {% for modification in modifications %}
-    <li><a href="{% url 'select_equipment' modification.pk %}">{{ modification.name }}</a></li>
-    {% endfor %}
-</ul>
+<h2>Тут по идее нужно приложение JS с заказ-нарядом на первом слое и каталогом работ в отдельном окне</h2>
 {% endblock content %}

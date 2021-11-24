@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import reset_queries
 from django.urls import reverse_lazy
-from django.views.generic import ListView, RedirectView
+from django.views.generic import ListView
 from .models import *
 from main.mixins import DataMixin
 
@@ -11,7 +12,7 @@ class ShowBrands(LoginRequiredMixin, DataMixin, ListView):
     context_object_name = 'brands'
     login_url = reverse_lazy('login')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Марки автомобилей')
         return {**context, **c_def}
@@ -27,7 +28,7 @@ class ShowModels(LoginRequiredMixin, DataMixin, ListView):
         return Model.objects.filter(brand_id=brand_pk)
         # return Brand.objects.get(pk=brand_pk).model_set.all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         brand_pk = self.kwargs.get('brand_pk', 0)
         current_brand_name = Brand.objects.get(
             pk=brand_pk).name if brand_pk else ''
@@ -46,60 +47,47 @@ class ShowModification(LoginRequiredMixin, DataMixin, ListView):
         model_pk = self.kwargs.get('model_pk', 0)
         return Modification.objects.filter(model_id=model_pk)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         model_pk = self.kwargs.get('model_pk', 0)
         current_model_name = Model.objects.get(
             pk=model_pk).name if model_pk else ''
         context = super().get_context_data(**kwargs)
+        qs = context.get('object_list')
+        # qs = object_list
+        exists_equipment = qs and Equipment.objects.filter(
+            modification_id=qs[0].pk)
         c_def = self.get_user_context(
-            title='Модификации модели ' + current_model_name)
+            title='Модификации модели ' + current_model_name, exists_equipment=exists_equipment)
         return {**context, **c_def}
 
 
-class ShowEquipment(LoginRequiredMixin, RedirectView, DataMixin, ListView):
+class ShowEquipment(LoginRequiredMixin, DataMixin, ListView):
     template_name = 'autonorms/equipments.html'
     context_object_name = 'equipments'
     login_url = reverse_lazy('login')
-    # pattern_name = 'select_equipment'
-    # url = 'http://127.0.0.1:8000'
 
     def get_queryset(self):
         modification_pk = self.kwargs.get('modification_pk', 0)
-        result = Equipment.objects.filter(modification_id=modification_pk)
+        return Equipment.objects.filter(modification_id=modification_pk)
 
-        # if not result:
-        #     self.get_redirect_url()
-
-        return result
-
-    # def get_redirect_url(self, *args, **kwargs):
-    #     redirect_url = None
-    #     modification_pk = self.kwargs.get('modification_pk', 0)
-    #     result = Equipment.objects.filter(modification_id=modification_pk)
-
-    #     if not result:
-    #         redirect_url = super().get_redirect_url(*args, **kwargs)
-
-    #     return redirect_url
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        modification_pk = self.kwargs.get('modification_pk', 0)
-        current_modification_name = Modification.objects.get(pk=modification_pk).name if modification_pk else ''
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Комплектации')
         return {**context, **c_def}
-
-
-# class GoToWorkTimes(RedirectView):
-#     permanent = True
-#     pattern_name = 'select_equipment'
-#     url = 'http://127.0.0.1:8000/'
-#
-#     def get_redirect_url(self, *args, **kwargs):
-#         return super().get_redirect_url(*args, **kwargs)
 
 
 class ShowWorkTimes(LoginRequiredMixin, DataMixin, ListView):
     template_name = 'autonorms/work-times.html'
     context_object_name = 'all_works'
     login_url = reverse_lazy('login')
+
+    def get_queryset(self):
+        equipment_pk = self.request.GET.get('equipment', 0)
+        modification_pk = self.request.GET.get('modification', 0)
+
+        if equipment_pk:
+            qs = WorkGroup.objects.filter(equipment_id=equipment_pk)
+        else:
+            qs = WorkGroup.objects.filter(modification_id=modification_pk)
+
+        return qs

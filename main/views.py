@@ -23,7 +23,7 @@ class MainIndex(DataMixin, ListView):
     def get_queryset(self):
         return Post.objects.filter(is_published=True).order_by('-time_create')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Автонормы')
         return {**context, **c_def}
@@ -35,7 +35,7 @@ class ShowPost(DataMixin, DetailView):
     slug_url_kwarg = 'post_slug'
     context_object_name = 'post'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Новость')
         return {**context, **c_def}
@@ -46,7 +46,7 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
     template_name = 'main/add_post.html'
     login_url = reverse_lazy('login')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Добавить новость')
         return {**context, **c_def}
@@ -74,7 +74,7 @@ class FeedbackFormView(DataMixin, FormView):
     template_name = 'main/feedback.html'
     success_url = 'home'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Добавить новость')
         return {**context, **c_def}
@@ -85,7 +85,7 @@ class RegisterUser(DataMixin, CreateView):
     template_name = 'main/registration.html'
     success_url = reverse_lazy('login')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Регистрация')
         return {**context, **c_def}
@@ -95,7 +95,7 @@ class LoginUser(DataMixin, LoginView):
     form_class = LoginUserForm
     template_name = 'main/login.html'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Авторизация')
         return {**context, **c_def}
@@ -114,7 +114,7 @@ class ProfileUser(DataMixin, DetailView):
     context_object_name = 'user_data'
     pk_url_kwarg = 'user_id'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Профиль пользователя')
         return {**context, **c_def}
@@ -124,7 +124,7 @@ class About(DataMixin, FormView):
     form_class = SimpleForm
     template_name = 'main/about.html'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='О сайте')
         return {**context, **c_def}

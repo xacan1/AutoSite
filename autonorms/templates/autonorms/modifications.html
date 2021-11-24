@@ -4,7 +4,11 @@
 <h1>{{ title }}</h1>
 <ul>
     {% for modification in modifications %}
+    {% if exists_equipment %}
     <li><a href="{% url 'select_equipment' modification.pk %}">{{ modification.name }} {{ modification.year }} {{ modification.horsepower }} {{ modification.engine_code }} {{ modification.car_body }}</a></li>
+    {% else %}
+    <li><a href="{% url 'work-times' %}?modification={{ modification.pk }}">{{ modification.name }} {{ modification.year }} {{ modification.horsepower }} {{ modification.engine_code }} {{ modification.car_body }}</a></li>
+    {% endif %}
     {% endfor %}
 </ul>
 {% endblock content %}
