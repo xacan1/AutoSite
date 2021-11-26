@@ -41,7 +41,8 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=12, unique=True, blank=True, verbose_name='Телефон')
     inn = models.CharField(max_length=12, blank=True, verbose_name='ИНН')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    request_limit = models.IntegerField(null=False, default=100, verbose_name='Суточный лимит запросов')
+    request_limit = models.IntegerField(null=False, default=100, verbose_name='Лимит запросов')
+    cost_per_hour = models.FloatField(null=False, default=1000.00, verbose_name='Стоимость часа')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

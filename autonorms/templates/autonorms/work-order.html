@@ -2,6 +2,32 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
-<h2>Тут по идее нужно приложение JS с заказ-нарядом на первом слое и каталогом работ в отдельном окне</h2>
-
+<div class="work-order">
+    <table>
+        <caption>Заказ-наряд</caption>
+        <thead>
+            <tr>
+                <th>№ п/п</th>
+                <th>Работа</th>
+                <th>Количество работ</th>
+                <th>Нормо-часы</th>
+                <th>Стоимость</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <button>Добавить работу</button>
+</div>
 {% endblock content %}

@@ -81,6 +81,11 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
     template_name = 'autonorms/work-order.html'
     login_url = reverse_lazy('login')
 
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Оформление заказ-наряда')
+        return {**context, **c_def}
+
 
 class ShowWorkGroups(LoginRequiredMixin, DataMixin, ListView):
     template_name = 'autonorms/work_groups.html'
