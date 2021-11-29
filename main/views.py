@@ -34,7 +34,7 @@ class RegisterUser(DataMixin, CreateView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Регистрация')
+        c_def = self.get_user_context(title='Регистрация', form_login=LoginUserForm)
         return {**context, **c_def}
 
 
@@ -53,7 +53,7 @@ class MainIndex(DataMixin, ListView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Автонормы')
+        c_def = self.get_user_context(title='Автонормы', form_login=LoginUserForm)
         return {**context, **c_def}
 
 
@@ -65,7 +65,7 @@ class ShowPost(DataMixin, DetailView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Новость')
+        c_def = self.get_user_context(title='Новость', form_login=LoginUserForm)
         return {**context, **c_def}
 
 
@@ -104,7 +104,7 @@ class FeedbackFormView(DataMixin, FormView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Добавить новость')
+        c_def = self.get_user_context(title='Сообщение')
         return {**context, **c_def}
 
 
@@ -126,5 +126,5 @@ class About(DataMixin, FormView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='О сайте')
+        c_def = self.get_user_context(title='О сайте', form_login=LoginUserForm)
         return {**context, **c_def}

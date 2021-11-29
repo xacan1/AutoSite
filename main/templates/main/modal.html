@@ -8,15 +8,15 @@ aria-hidden="true">
             <button type="button" class="btn-close" data-bs-dismiss="modal"
                 aria-label="Close"></button>
         </div>
-        <form method="post">
+        <form method="post" action="{% url 'login' %}">
             <div class="modal-body">
                 {% csrf_token %}
-                {{ form.as_p }}
+                {{ form_login.as_p }}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Login</button>
+                    data-bs-dismiss="modal">Закрыть</button>
+                <button type="submit" class="btn btn-primary">Войти</button>
             </div>
         </form>
     </div>
