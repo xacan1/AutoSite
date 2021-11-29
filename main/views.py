@@ -27,7 +27,22 @@ class LoginUser(DataMixin, LoginView):
         return reverse_lazy('home')
 
 
-class MainIndex(ListView, LoginUser):
+class RegisterUser(DataMixin, CreateView):
+    form_class = RegisterUserForm
+    template_name = 'main/registration.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Регистрация')
+        return {**context, **c_def}
+
+
+class LogoutUser(LogoutView):
+    next_page = 'home'
+
+
+class MainIndex(DataMixin, ListView):
     model = Post
     template_name = 'main/index.html'
     context_object_name = 'posts'
@@ -91,21 +106,6 @@ class FeedbackFormView(DataMixin, FormView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Добавить новость')
         return {**context, **c_def}
-
-
-class RegisterUser(DataMixin, CreateView):
-    form_class = RegisterUserForm
-    template_name = 'main/registration.html'
-    success_url = reverse_lazy('login')
-
-    def get_context_data(self, **kwargs) -> dict:
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Регистрация')
-        return {**context, **c_def}
-
-
-class LogoutUser(LogoutView):
-    next_page = 'home'
 
 
 class ProfileUser(DataMixin, DetailView):

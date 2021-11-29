@@ -41,7 +41,7 @@
                         </li>
                         {% elif value == 'login' %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url value %}" data-bs-toggle="modal" data-bs-target="#ModalLogin">{{ key }}</a>
+                            <a class="nav-link active" aria-current="page" href="{% url value %}" data-bs-toggle1="modal" data-bs-target1="#ModalLogin">{{ key }}</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
@@ -50,30 +50,7 @@
                         {% endif %}
                         {% endfor %}
                     </ul>
-                    <!-- Modal -->
-                    <div class="modal fade" id="ModalLogin" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Войти на сайт</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <form method="post">
-                                    <div class="modal-body">
-                                        {% csrf_token %}
-                                        {{ form.as_p }}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Login</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    {% include 'main/modal.html' %}
                 </div>
             </div>
         </nav>
