@@ -3,7 +3,7 @@
 {% block content %}
 {% if user.is_authenticated and user.pk == user_data.pk %}
 <h1>Профиль пользователя: {{ user_data.email }}</h1>
-<table>
+<table class="table">
     <caption>Данные пользователя</caption>
     <thead>
     <tr>

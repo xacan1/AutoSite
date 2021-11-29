@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
+<style>
+    a:hover {
+        color: #555;
+    }
+</style>
 
 <head>
     <meta charset="UTF-8">
@@ -12,7 +17,7 @@
 <body>
     <header>
         {% block mainmenu %}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'home' %}">Autonorms online</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -23,9 +28,20 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         {% for key, value in menu.items %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url value %}">{{ key }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        {% for key, value in user_menu.items %}
                         {% if user.is_authenticated and user.email == key %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{% url 'profile' user.pk %}">{{ key }}</a>
+                        </li>
+                        {% elif value == 'login' %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url value %}" data-bs-toggle="modal" data-bs-target="#ModalLogin">{{ key }}</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
@@ -34,6 +50,30 @@
                         {% endif %}
                         {% endfor %}
                     </ul>
+                    <!-- Modal -->
+                    <div class="modal fade" id="ModalLogin" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Войти на сайт</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <form method="post">
+                                    <div class="modal-body">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Login</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>

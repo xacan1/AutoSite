@@ -14,7 +14,20 @@ class PageNotFound(FormView):
     template_name = 'main/page404.html'
 
 
-class MainIndex(DataMixin, ListView):
+class LoginUser(DataMixin, LoginView):
+    form_class = LoginUserForm
+    template_name = 'main/login.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Авторизация')
+        return {**context, **c_def}
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+
+class MainIndex(ListView, LoginUser):
     model = Post
     template_name = 'main/index.html'
     context_object_name = 'posts'
@@ -89,19 +102,6 @@ class RegisterUser(DataMixin, CreateView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Регистрация')
         return {**context, **c_def}
-
-
-class LoginUser(DataMixin, LoginView):
-    form_class = LoginUserForm
-    template_name = 'main/login.html'
-
-    def get_context_data(self, **kwargs) -> dict:
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Авторизация')
-        return {**context, **c_def}
-
-    def get_success_url(self):
-        return reverse_lazy('home')
 
 
 class LogoutUser(LogoutView):
