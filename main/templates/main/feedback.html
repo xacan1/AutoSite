@@ -1,12 +1,10 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<div class="p-4 col-sm-5">
-    <h1>{{ title }}</h1>
-    <form action="{% url 'feedback' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Отправить</button>
-    </form>
-</div>
+<h1>{{ title }}</h1>
+<form action="{% url 'feedback' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Отправить</button>
+</form>
 {% endblock content %}
