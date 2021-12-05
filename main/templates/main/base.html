@@ -90,7 +90,7 @@
     <footer class="footer mt-auto py-3 bg-primary">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 col-6">
+                <div class="col-md-4 col-6">
                     <h4>Информация</h4>
                     <ul>
                         <li><a href="{% url 'home' %}">Главная</a></li>
@@ -98,7 +98,7 @@
                         <li><a href="#">Размещение рекламы</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3 col-6">
+                <div class="col-md-4 col-6">
                     <h4>Контакты</h4>
                     <ul>
                         <li>8(927)777-77-77</li>
@@ -106,15 +106,20 @@
                         <li>admin@mail.ru</li>
                     </ul>
                 </div>
-                <div class="col-md-3 col-6">
+                <div class="col-md-4 col-6">
                     <h4>Ссылки</h4>
                     <ul>
+                        {% if not user.is_authenticated %}
+                        <li><a href="{% url 'login' %}" data-bs-toggle="modal" data-bs-target="#ModalLogin">Автонормы</a></li>
+                        {% else %}
                         <li><a href="{% url 'autonorms' %}">Автонормы</a></li>
+                        {% endif %}
                         <li><a href="{% url 'home' %}">Главная</a></li>
-                        <li><a href="{% url 'home' %}">Главная</a></li>
+                        <li><a href="{% url 'feedback' %}">Обратная связь</a></li>
                     </ul>
                 </div>
             </div>
+            <div class="footer-year text-center"><span>©Autonorms Online 2021</span></div>
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
