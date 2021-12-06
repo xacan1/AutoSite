@@ -19,7 +19,7 @@ from main.views import PageNotFound
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^accounts/', include('accounts.passwords.urls')),
+    re_path(r'^accounts/', include('accounts.urls')),
     path('', include('main.urls')),
     path('', include('autonorms.urls')),
 ]

@@ -20,7 +20,7 @@ class LoginUser(DataMixin, LoginView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Авторизация')
+        c_def = self.get_user_context(title='Авторизация', form_login=LoginUserForm)
         return {**context, **c_def}
 
     def get_success_url(self):
