@@ -2,7 +2,7 @@
 # from django.http import HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import CustomUser, Post
 from .forms import AddPostForm, RegisterUserForm, FeedbackForm, LoginUserForm, SimpleForm
@@ -14,13 +14,14 @@ class PageNotFound(FormView):
     template_name = 'main/page404.html'
 
 
-class LoginUser(DataMixin, LoginView):
+class LoginUser(DataMixin, auth_views.LoginView):
     form_class = LoginUserForm
     template_name = 'main/login.html'
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Авторизация', form_login=LoginUserForm)
+        c_def = self.get_user_context(
+            title='Авторизация', form_login=LoginUserForm)
         return {**context, **c_def}
 
     def get_success_url(self):
@@ -34,11 +35,12 @@ class RegisterUser(DataMixin, CreateView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Регистрация', form_login=LoginUserForm)
+        c_def = self.get_user_context(
+            title='Регистрация', form_login=LoginUserForm)
         return {**context, **c_def}
 
 
-class LogoutUser(LogoutView):
+class LogoutUser(auth_views.LogoutView):
     next_page = 'home'
 
 
@@ -53,7 +55,8 @@ class MainIndex(DataMixin, ListView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Автонормы', form_login=LoginUserForm)
+        c_def = self.get_user_context(
+            title='Автонормы', form_login=LoginUserForm)
         return {**context, **c_def}
 
 
@@ -65,7 +68,8 @@ class ShowPost(DataMixin, DetailView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Новость', form_login=LoginUserForm)
+        c_def = self.get_user_context(
+            title='Новость', form_login=LoginUserForm)
         return {**context, **c_def}
 
 
@@ -126,5 +130,64 @@ class About(DataMixin, FormView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='О сайте', form_login=LoginUserForm)
+        c_def = self.get_user_context(
+            title='О сайте', form_login=LoginUserForm)
+        return {**context, **c_def}
+
+
+class MyPasswordResetView(DataMixin, auth_views.PasswordResetView):
+    template_name = 'main/password_reset.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(
+            title='Сброс пароля', form_login=LoginUserForm)
+        return {**context, **c_def}
+
+
+class MyPasswordChangeView(DataMixin, auth_views.PasswordChangeView):
+    template_name = 'main/password_change.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Изменение пароля')
+        return {**context, **c_def}
+
+
+class MyPasswordChangeDoneView(DataMixin, auth_views.PasswordChangeDoneView):
+    template_name = 'main/password_change_done.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Пароль успешно изменен!')
+        return {**context, **c_def}
+
+
+class MyPasswordResetConfirmView(DataMixin, auth_views.PasswordResetConfirmView):
+    template_name = 'main/password_reset_confirm.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(
+            title='Установите новый пароль', form_login=LoginUserForm)
+        return {**context, **c_def}
+
+
+class MyPasswordResetDoneView(DataMixin, auth_views.PasswordResetDoneView):
+    template_name = 'main/password_reset_done.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(
+            title='Письмо с инструкциями по восстановлению пароля отправлено', form_login=LoginUserForm)
+        return {**context, **c_def}
+
+
+class MyPasswordResetCompleteView(DataMixin, auth_views.PasswordResetCompleteView):
+    template_name = 'main/password_reset_complete.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(
+            title='Восстановление пароля завершено', form_login=LoginUserForm)
         return {**context, **c_def}

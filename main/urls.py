@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import *
 
 urlpatterns = [
@@ -11,4 +11,16 @@ urlpatterns = [
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/', LogoutUser.as_view(), name='logout'),
     path('profile/<int:user_id>', ProfileUser.as_view(), name='profile'),
+    re_path(r'^passwords/change/$', MyPasswordChangeView.as_view(),
+            name='password_change'),
+    re_path(r'^passwords/change/done/$',
+            MyPasswordChangeDoneView.as_view(), name='password_change_done'),
+    re_path(r'^passwords/reset/$', MyPasswordResetView.as_view(),
+            name='password_reset'),
+    re_path(r'^passwords/reset/done/$',
+            MyPasswordResetDoneView.as_view(),  name='password_reset_done'),
+    re_path(r'^passwords/reset/confirm/(?P<uidb64>[-\w]+)/(?P<token>[-\w]+)/$',
+            MyPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    re_path(r'^passwords/reset/complete/$',
+            MyPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]
