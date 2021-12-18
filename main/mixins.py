@@ -1,6 +1,7 @@
-user_menu = {'Войти': 'login', 'Регистрация': 'registration', 'Выйти': 'logout'}
-menu = {'На главную': 'home', 'О сайте': 'about', 'Добавить новость': 'add_post', 'Обратная связь': 'feedback',
-        'Автонормы': 'autonorms'}
+user_menu = {'Войти': 'login',
+             'Регистрация': 'registration', 'Выйти': 'logout'}
+menu = {'На главную': 'home', 'О сайте': 'about', 'Добавить новость': 'add_post',
+        'Обратная связь': 'feedback', 'Автонормы': 'autonorms'}
 
 
 class DataMixin:
@@ -27,3 +28,14 @@ class DataMixin:
         context['user_menu'] = context_user_menu
         context['menu'] = context_menu
         return context
+
+    def check_requests_limit(self):
+        result = False
+        print(
+            f"{self.request.user.email} ip: {self.request.META.get('REMOTE_ADDR')}: {self.request.session['number_requests']} request in {self.request.user.request_limit}")
+
+        if self.request.session['number_requests'] > self.request.user.request_limit:
+            self.request.session['number_requests'] = 0
+            result = True
+
+        return result

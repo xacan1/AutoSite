@@ -1,10 +1,16 @@
 {% extends 'autonorms/base.html' %}
+{% load static %}
 
 {% block content %}
+<link type="text/css" rel="stylesheet" href="{% static 'autonorms/css/autonorms.css' %}">
 <h1>{{ title }}</h1>
-<div class="work-order">
+<div class="work-order pt-1">
+    <div>
+        <p>{{ mark }} {{ model }}</p>
+        <p>{{ modification }} {{ equipment }}</p>
+    </div>
     <table class="table">
-        <caption>Заказ-наряд</caption>
+        <caption>Калькуляция работ</caption>
         <thead>
             <tr>
                 <th>№ п/п</th>
@@ -27,7 +33,9 @@
         </tbody>
     </table>
 </div>
+{% include 'autonorms/modal_select_works.html' %}
 <div>
-    <button class="btn btn-primary">Добавить работу</button>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalSelectGroupWorks">Добавить работу</button>
 </div>
+<script src="{% static 'autonorms/js/autonorms.js' %}"></script>
 {% endblock content %}

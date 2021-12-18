@@ -1,0 +1,37 @@
+<!-- Modal -->
+<div class="modal fade" id="ModalSelectGroupWorks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title px-3" id="SelectWorksModalLabel">Работы</h5>
+                <input class="form-control px-3" type="text" placeholder="Поиск по работам" value="">
+                <button type="button" class="btn-close px-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="generalWorksGroupsUL">
+                    {% for key, value in work_groups.items %}
+                    <li>
+                        <span class="caret">{{ key }}</span>
+                        <ul class="nested">
+                            {% for key, value in value.items %}
+                            <!-- <li> key </li> -->
+                            <li>
+                                <span class="caret">{{ key }}</span>
+                                <ul class="nested">
+                                    {% for key, value in value.items %}
+                                    <li>{{ key }} <button type="button" class="btn btn-secondary btn-sm">Добавить</button></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Вернуться в заказ-наряд</button>
+            </div>
+        </div>
+    </div>
+</div>

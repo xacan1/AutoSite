@@ -1,10 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import reset_queries
+from django.db.models.query_utils import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, FormView
 from .forms import SimpleForm
 from .models import *
 from main.mixins import DataMixin
+from django.shortcuts import redirect
 
 
 class ShowBrands(LoginRequiredMixin, DataMixin, ListView):
@@ -71,8 +73,10 @@ class ShowEquipment(LoginRequiredMixin, DataMixin, ListView):
         return Equipment.objects.filter(modification_id=modification_pk)
 
     def get_context_data(self, **kwargs) -> dict:
+        modification_pk = self.kwargs.get('modification_pk', 0)
+        current_modification = Modification.objects.get(pk=modification_pk)
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Комплектации')
+        c_def = self.get_user_context(title='Комплектации', modification_info=current_modification)
         return {**context, **c_def}
 
 
@@ -81,10 +85,70 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
     template_name = 'autonorms/work-order.html'
     login_url = reverse_lazy('login')
 
+    def get_works(self, equipment_pk: int, modification_pk: int, model_pk: int) -> dict:
+        # work_groups = WorkGroup.objects.filter(Q(equipment_id=equipment_pk) | Q(modification_id=modification_pk) | Q(model_id=model_pk))
+
+        if equipment_pk:
+            work_groups_ids = tuple(WorkGroup.objects.filter(equipment_id=equipment_pk).values_list('pk', flat=True))
+        elif modification_pk:
+            work_groups_ids = tuple(WorkGroup.objects.filter(modification_id=modification_pk).values_list('pk', flat=True))
+        else:
+            work_groups_ids = tuple(WorkGroup.objects.filter(model_id=model_pk).values_list('pk', flat=True))
+
+        # works = Work.objects.filter(vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
+        works = Work.objects.select_related('vehicle_unit', 'vehicle_unit__workgroup').filter(vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
+        subworks = tuple(SubWork.objects.values('name', 'work__pk').filter(work__vehicle_unit__workgroup__pk__in=work_groups_ids))
+        # print(subworks)
+
+        dict_works = {}
+        dict_vehicleunits = {}
+        dict_work_groups = {}
+        prev_vehicleunits = None
+        prev_workgroup = None
+
+        for work in works:
+            if prev_workgroup is None and prev_vehicleunits is None:
+                prev_workgroup = work.vehicle_unit.workgroup.name
+                prev_vehicleunits = work.vehicle_unit.name
+
+            if prev_vehicleunits == work.vehicle_unit.name:
+                dict_works[work.name] = work.working_hour
+            else:
+                dict_vehicleunits[prev_vehicleunits] = dict_works.copy()
+                dict_works.clear()
+                dict_works[work.name] = work.working_hour
+                prev_vehicleunits = work.vehicle_unit.name
+
+            if prev_workgroup == work.vehicle_unit.workgroup.name:
+                dict_vehicleunits[work.vehicle_unit.name] = dict_works.copy()
+            else:
+                dict_work_groups[prev_workgroup] = dict_vehicleunits.copy()
+                dict_vehicleunits.clear()
+                dict_vehicleunits[work.vehicle_unit.name] = ['work_name']
+                prev_workgroup = work.vehicle_unit.workgroup.name
+        
+        dict_work_groups[prev_workgroup] = dict_vehicleunits
+
+        return dict_work_groups
+        
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Оформление заказ-наряда')
+        model_pk = self.request.GET.get('model', 0)
+        modification_pk = self.request.GET.get('modification', 0)
+        equipment_pk = self.request.GET.get('equipment', 0)
+        dict_work_groups = self.get_works(equipment_pk, modification_pk, model_pk)
+        c_def = self.get_user_context(title='Оформление заказ-наряда', work_groups=dict_work_groups)
         return {**context, **c_def}
+
+    def get(self, request, *args: str, **kwargs):
+        # увеличу счетчик запросов в сессии
+        request.session['number_requests'] = request.session.get(
+            'number_requests', 0) + 1
+
+        if self.check_requests_limit():
+            return redirect('logout')
+
+        return super().get(request, *args, **kwargs)
 
 
 class ShowWorkGroups(LoginRequiredMixin, DataMixin, ListView):
@@ -102,3 +166,12 @@ class ShowWorkGroups(LoginRequiredMixin, DataMixin, ListView):
             qs = WorkGroup.objects.filter(modification_id=modification_pk)
 
         return qs
+
+    def get(self, request, *args: str, **kwargs):
+        request.session['number_requests'] = request.session.get(
+            'number_requests', 0) + 1
+
+        if self.check_requests_limit():
+            return redirect('logout')
+
+        return super().get(request, *args, **kwargs)
