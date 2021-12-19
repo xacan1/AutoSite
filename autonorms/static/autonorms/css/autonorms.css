@@ -1,33 +1,42 @@
 
 ul, #generalWorksGroupsUL {
-list-style-type: none;
+    list-style-type: none;
 }
 
 #generalWorksGroupsUL {
-margin: 0;
-padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-.caret {
-cursor: pointer;
-user-select: none;
+.vehicleunit, .caret {
+    cursor: pointer;
+    user-select: none;
 }
 
 .caret::before {
-content: "\25B6";
-color: black;
-display: inline-block;
-margin-right: 6px;
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
 }
 
 .caret-down::before {
-transform: rotate(90deg);  
+    transform: rotate(90deg);
 }
 
-.nested {
-display: none;
+.nested, .hidden {
+    display: none;
 }
 
 .active {
-display: block;
+    display: block;
+}
+
+.vehicleunit-active {
+    font-weight: bold;
+}
+
+.workgroup:hover, .vehicleunit:hover {
+    color: brown;
+    text-decoration: underline;
 }

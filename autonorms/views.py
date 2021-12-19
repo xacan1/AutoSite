@@ -112,11 +112,11 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
                 prev_vehicleunits = work.vehicle_unit.name
 
             if prev_vehicleunits == work.vehicle_unit.name:
-                dict_works[work.name] = work.working_hour
+                dict_works[work.name] = work.pk
             else:
                 dict_vehicleunits[prev_vehicleunits] = dict_works.copy()
                 dict_works.clear()
-                dict_works[work.name] = work.working_hour
+                dict_works[work.name] = work.pk
                 prev_vehicleunits = work.vehicle_unit.name
 
             if prev_workgroup == work.vehicle_unit.workgroup.name:
@@ -124,20 +124,61 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
             else:
                 dict_work_groups[prev_workgroup] = dict_vehicleunits.copy()
                 dict_vehicleunits.clear()
-                dict_vehicleunits[work.vehicle_unit.name] = ['work_name']
+                # dict_vehicleunits[work.vehicle_unit.name] = dict_works.copy()
                 prev_workgroup = work.vehicle_unit.workgroup.name
         
         dict_work_groups[prev_workgroup] = dict_vehicleunits
 
         return dict_work_groups
+
+    def get_works2(self, equipment_pk: int, modification_pk: int, model_pk: int) -> dict:
+        if equipment_pk:
+            work_groups_ids = tuple(WorkGroup.objects.filter(equipment_id=equipment_pk).values_list('pk', flat=True))
+        elif modification_pk:
+            work_groups_ids = tuple(WorkGroup.objects.filter(modification_id=modification_pk).values_list('pk', flat=True))
+        else:
+            work_groups_ids = tuple(WorkGroup.objects.filter(model_id=model_pk).values_list('pk', flat=True))
+
+        # works = Work.objects.filter(vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
+        works = Work.objects.select_related('vehicle_unit', 'vehicle_unit__workgroup').filter(vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
+        subworks = tuple(SubWork.objects.values('name', 'work__pk').filter(work__vehicle_unit__workgroup__pk__in=work_groups_ids))
+
+        all_works = []
+        dict_work = {}
+        dict_vehicleunits = {}
+        dict_work_groups = {}
+        prev_workgroup = None
+
+        for work in works:
+            dict_work['name'] = work.name
+            dict_work['pk'] = work.pk
+            dict_work['vehicle_unit_pk'] = work.vehicle_unit.pk
+            dict_work['work_group_pk'] = work.work_group.pk
+            all_works.append(dict_work.copy())
+
+            if prev_workgroup is None:
+                prev_workgroup = work.vehicle_unit.workgroup.name
+
+            if prev_workgroup == work.vehicle_unit.workgroup.name:
+                dict_vehicleunits[work.vehicle_unit.name] = work.vehicle_unit.pk
+            else:
+                dict_work_groups[prev_workgroup] = dict_vehicleunits.copy()
+                dict_vehicleunits.clear()
+                dict_vehicleunits[work.vehicle_unit.name] = work.vehicle_unit.pk
+                prev_workgroup = work.vehicle_unit.workgroup.name
+        
+        dict_work_groups[prev_workgroup] = dict_vehicleunits
+
+        return dict_work_groups, all_works
+
         
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         model_pk = self.request.GET.get('model', 0)
         modification_pk = self.request.GET.get('modification', 0)
         equipment_pk = self.request.GET.get('equipment', 0)
-        dict_work_groups = self.get_works(equipment_pk, modification_pk, model_pk)
-        c_def = self.get_user_context(title='Оформление заказ-наряда', work_groups=dict_work_groups)
+        dict_work_groups, all_works = self.get_works2(equipment_pk, modification_pk, model_pk)
+        c_def = self.get_user_context(title='Оформление заказ-наряда', workgroups=dict_work_groups, works=all_works)
         return {**context, **c_def}
 
     def get(self, request, *args: str, **kwargs):
