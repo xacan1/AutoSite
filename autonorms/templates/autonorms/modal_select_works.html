@@ -26,9 +26,24 @@
                     <div class="col">
                         <ul>
                             {% for work in works %}
-                            <li class="hidden pb-1" name="work" data-work-pk="{{ work.pk }}"
-                                data-vehicleunit-pk="{{ work.vehicle_unit_pk }}">{{ work.name }}
-                                <button type="button" class="btn btn-secondary btn-sm">[+]</button>
+                            <li class="hidden pb-1 work" name="work" data-work-pk="{{ work.pk }}"
+                                data-vehicleunit-pk="{{ work.vehicle_unit_pk }}">
+                                <div class="row">
+                                    <div class="col">
+                                        {{ work.name }}
+                                    </div>
+                                    <div class="col-1">
+                                        <button type="button" class="btn btn-secondary btn-sm btn-add-work"
+                                            onclick="get_work(this);"></button>
+                                    </div>
+                                </div>
+                                {% if work.subworks %}
+                                <ul>
+                                    {% for subwork in work.subworks %}
+                                    <li><span class="subwork">+ {{ subwork.name }}</span></li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
                             </li>
                             {% endfor %}
                         </ul>

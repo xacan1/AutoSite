@@ -5,31 +5,31 @@
 <link type="text/css" rel="stylesheet" href="{% static 'autonorms/css/autonorms.css' %}">
 <h1>{{ title }}</h1>
 <div class="work-order pt-1">
-    <div>
-        <p>{{ mark }} {{ model }}</p>
-        <p>{{ modification }} {{ equipment }}</p>
+    <div class="container p-0">
+        <div class="row fw-light">
+            <div class="col-8">
+                <p>Марка: <span class="fw-bolder">{{ auto_info.brand }}</span> Модель: <span class="fw-bolder">{{ auto_info.model }}</span></p>
+                <p>Модификация: <span class="fw-bolder">{{ auto_info.modification }} {{ auto_info.equipment }}</span></p>
+            </div>
+            <div class="col-4">
+                <p><span>Организация: </span><span class="company fw-bolder">{{ user.company }}</span></p>
+                <p><span>Стоимость н-ч: </span><span id="costPerHour" class="fw-bolder">{{ user.cost_per_hour|stringformat:".2f" }}</span></p>
+            </div>
+        </div>
     </div>
-    <table class="table">
+    <table id="tableOfOrder" class="table table-hover align-middle">
         <caption>Калькуляция работ</caption>
         <thead>
             <tr>
                 <th>№ п/п</th>
                 <th>Работа</th>
-                <th>Количество работ</th>
-                <th>Нормо-часы</th>
+                <th>Кол-во</th>
+                <th>Время</th>
                 <th>Стоимость</th>
                 <th>Удалить</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
         </tbody>
     </table>
 </div>

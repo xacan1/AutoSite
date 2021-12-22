@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import reset_queries
-from django.db.models.query_utils import Q
+# from django.db.models.query_utils import Q
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.http import JsonResponse
 from django.views.generic import ListView, FormView
+import json
 from .forms import SimpleForm
 from .models import *
 from main.mixins import DataMixin
-from django.shortcuts import redirect
 
 
 class ShowBrands(LoginRequiredMixin, DataMixin, ListView):
@@ -76,7 +77,8 @@ class ShowEquipment(LoginRequiredMixin, DataMixin, ListView):
         modification_pk = self.kwargs.get('modification_pk', 0)
         current_modification = Modification.objects.get(pk=modification_pk)
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Комплектации', modification_info=current_modification)
+        c_def = self.get_user_context(
+            title='Комплектации', modification_info=current_modification)
         return {**context, **c_def}
 
 
@@ -86,62 +88,21 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
     login_url = reverse_lazy('login')
 
     def get_works(self, equipment_pk: int, modification_pk: int, model_pk: int) -> dict:
-        # work_groups = WorkGroup.objects.filter(Q(equipment_id=equipment_pk) | Q(modification_id=modification_pk) | Q(model_id=model_pk))
-
         if equipment_pk:
-            work_groups_ids = tuple(WorkGroup.objects.filter(equipment_id=equipment_pk).values_list('pk', flat=True))
+            work_groups_ids = tuple(WorkGroup.objects.filter(
+                equipment_id=equipment_pk).values_list('pk', flat=True))
         elif modification_pk:
-            work_groups_ids = tuple(WorkGroup.objects.filter(modification_id=modification_pk).values_list('pk', flat=True))
+            work_groups_ids = tuple(WorkGroup.objects.filter(
+                modification_id=modification_pk).values_list('pk', flat=True))
         else:
-            work_groups_ids = tuple(WorkGroup.objects.filter(model_id=model_pk).values_list('pk', flat=True))
+            work_groups_ids = tuple(WorkGroup.objects.filter(
+                model_id=model_pk).values_list('pk', flat=True))
 
         # works = Work.objects.filter(vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
-        works = Work.objects.select_related('vehicle_unit', 'vehicle_unit__workgroup').filter(vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
-        subworks = tuple(SubWork.objects.values('name', 'work__pk').filter(work__vehicle_unit__workgroup__pk__in=work_groups_ids))
-        # print(subworks)
-
-        dict_works = {}
-        dict_vehicleunits = {}
-        dict_work_groups = {}
-        prev_vehicleunits = None
-        prev_workgroup = None
-
-        for work in works:
-            if prev_workgroup is None and prev_vehicleunits is None:
-                prev_workgroup = work.vehicle_unit.workgroup.name
-                prev_vehicleunits = work.vehicle_unit.name
-
-            if prev_vehicleunits == work.vehicle_unit.name:
-                dict_works[work.name] = work.pk
-            else:
-                dict_vehicleunits[prev_vehicleunits] = dict_works.copy()
-                dict_works.clear()
-                dict_works[work.name] = work.pk
-                prev_vehicleunits = work.vehicle_unit.name
-
-            if prev_workgroup == work.vehicle_unit.workgroup.name:
-                dict_vehicleunits[work.vehicle_unit.name] = dict_works.copy()
-            else:
-                dict_work_groups[prev_workgroup] = dict_vehicleunits.copy()
-                dict_vehicleunits.clear()
-                # dict_vehicleunits[work.vehicle_unit.name] = dict_works.copy()
-                prev_workgroup = work.vehicle_unit.workgroup.name
-        
-        dict_work_groups[prev_workgroup] = dict_vehicleunits
-
-        return dict_work_groups
-
-    def get_works2(self, equipment_pk: int, modification_pk: int, model_pk: int) -> dict:
-        if equipment_pk:
-            work_groups_ids = tuple(WorkGroup.objects.filter(equipment_id=equipment_pk).values_list('pk', flat=True))
-        elif modification_pk:
-            work_groups_ids = tuple(WorkGroup.objects.filter(modification_id=modification_pk).values_list('pk', flat=True))
-        else:
-            work_groups_ids = tuple(WorkGroup.objects.filter(model_id=model_pk).values_list('pk', flat=True))
-
-        # works = Work.objects.filter(vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
-        works = Work.objects.select_related('vehicle_unit', 'vehicle_unit__workgroup').filter(vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
-        subworks = tuple(SubWork.objects.values('name', 'work__pk').filter(work__vehicle_unit__workgroup__pk__in=work_groups_ids))
+        works = Work.objects.select_related('vehicle_unit', 'vehicle_unit__workgroup').filter(
+            vehicle_unit__workgroup__pk__in=work_groups_ids).order_by('work_group__pk')
+        subworks = tuple(SubWork.objects.values('name', 'work__pk').filter(
+            work__vehicle_unit__workgroup__pk__in=work_groups_ids))
 
         all_works = []
         dict_work = {}
@@ -154,6 +115,8 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
             dict_work['pk'] = work.pk
             dict_work['vehicle_unit_pk'] = work.vehicle_unit.pk
             dict_work['work_group_pk'] = work.work_group.pk
+            dict_work['subworks'] = [
+                subwork for subwork in subworks if dict_work['pk'] == subwork['work__pk']]
             all_works.append(dict_work.copy())
 
             if prev_workgroup is None:
@@ -166,19 +129,41 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
                 dict_vehicleunits.clear()
                 dict_vehicleunits[work.vehicle_unit.name] = work.vehicle_unit.pk
                 prev_workgroup = work.vehicle_unit.workgroup.name
-        
+
         dict_work_groups[prev_workgroup] = dict_vehicleunits
 
         return dict_work_groups, all_works
 
-        
+    def get_auto_info(self, equipment_pk: int, modification_pk: int, model_pk: int) -> dict:
+        auto_info = {'brand': '', 'model': '',
+                     'modification': '', 'equipment': ''}
+
+        if equipment_pk:
+            auto_info['equipment'] = Equipment.objects.get(pk=equipment_pk)
+            auto_info['modification'] = auto_info['equipment'].modification
+            auto_info['model'] = auto_info['modification'].model
+            auto_info['brand'] = auto_info['model'].brand
+        elif modification_pk:
+            auto_info['modification'] = Modification.objects.get(
+                pk=modification_pk)
+            auto_info['model'] = auto_info['modification'].model
+            auto_info['brand'] = auto_info['model'].brand
+        elif model_pk:
+            auto_info['model'] = Model.objects.get(pk=model_pk)
+            auto_info['brand'] = auto_info['model'].brand
+
+        return auto_info
+
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         model_pk = self.request.GET.get('model', 0)
         modification_pk = self.request.GET.get('modification', 0)
         equipment_pk = self.request.GET.get('equipment', 0)
-        dict_work_groups, all_works = self.get_works2(equipment_pk, modification_pk, model_pk)
-        c_def = self.get_user_context(title='Оформление заказ-наряда', workgroups=dict_work_groups, works=all_works)
+        dict_work_groups, all_works = self.get_works(
+            equipment_pk, modification_pk, model_pk)
+        auto_info = self.get_auto_info(equipment_pk, modification_pk, model_pk)
+        c_def = self.get_user_context(
+            title='Оформление заказ-наряда', workgroups=dict_work_groups, works=all_works, auto_info=auto_info)
         return {**context, **c_def}
 
     def get(self, request, *args: str, **kwargs):
@@ -192,27 +177,25 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
         return super().get(request, *args, **kwargs)
 
 
-class ShowWorkGroups(LoginRequiredMixin, DataMixin, ListView):
-    template_name = 'autonorms/work_groups.html'
-    context_object_name = 'work_groups'
+class AddWorkToOrder(LoginRequiredMixin, FormView):
+    form_class = SimpleForm
     login_url = reverse_lazy('login')
+    success_url = reverse_lazy('work-order')
 
-    def get_queryset(self):
-        equipment_pk = self.request.GET.get('equipment', 0)
-        modification_pk = self.request.GET.get('modification', 0)
+    def get_work_info(self) -> dict:
+        work_info = {}
+        serialized_data = json.loads(self.request.body)
+        work_pk = serialized_data.get('work_pk', 0)
+        add = serialized_data.get('add', False)
 
-        if equipment_pk:
-            qs = WorkGroup.objects.filter(equipment_id=equipment_pk)
-        else:
-            qs = WorkGroup.objects.filter(modification_id=modification_pk)
+        if work_pk and add:
+            work_info = Work.objects.values(
+                'name', 'working_hour', 'pk',).get(pk=work_pk)
+            work_info['subworks'] = tuple(SubWork.objects.values(
+                'name', 'working_hour', 'work_id').filter(work_id=work_pk))
 
-        return qs
+        return work_info
 
-    def get(self, request, *args: str, **kwargs):
-        request.session['number_requests'] = request.session.get(
-            'number_requests', 0) + 1
-
-        if self.check_requests_limit():
-            return redirect('logout')
-
-        return super().get(request, *args, **kwargs)
+    def post(self, request, *args: str, **kwargs):
+        work_info = self.get_work_info()
+        return JsonResponse(work_info)

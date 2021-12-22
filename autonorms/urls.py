@@ -7,5 +7,5 @@ urlpatterns = [
     path('modification/model<int:model_pk>', ShowModification.as_view(), name='select_modification'),
     path('equipment/modification<int:modification_pk>', ShowEquipment.as_view(), name='select_equipment'),
     path('work-order', ShowWorkOrder.as_view(), name='work-order'),
-    path('work_groups', ShowWorkGroups.as_view(), name='work_groups'),
+    path('add-work-to-order', AddWorkToOrder.as_view(), name='add-work-to-order'),
 ]

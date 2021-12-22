@@ -24,6 +24,10 @@ ul, #generalWorksGroupsUL {
     transform: rotate(90deg);
 }
 
+.workgroup-active {
+    background-color: rgb(200, 221, 230);
+}
+
 .nested, .hidden {
     display: none;
 }
@@ -33,10 +37,38 @@ ul, #generalWorksGroupsUL {
 }
 
 .vehicleunit-active {
-    font-weight: bold;
+    background-color: rgb(220, 221, 230);
 }
 
 .workgroup:hover, .vehicleunit:hover {
     color: brown;
     text-decoration: underline;
+}
+
+.work {
+    border-bottom: 1px solid #e6e9ed;
+}
+.subwork {
+    font-size: .9rem;
+    font-style: italic;
+}
+
+.modal-body > .row > .col {
+    border-left: 1px solid #e6e9ed;
+}
+
+.work > div {
+    align-items: center;
+}
+
+.btn-add-work::before {
+    content: "\2610";
+}
+
+.btn-added-work::before {
+    content: "\1F5F9";
+}
+
+.btn-delete-work::before {
+    content: "\2613";
 }
