@@ -6,6 +6,19 @@ ul, #generalWorksGroupsUL {
 #generalWorksGroupsUL {
     margin: 0;
     padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 70vh;
+}
+
+#generalWorksUL {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 70vh;
+}
+
+.modal-body > .row > .col {
+    border-left: 1px solid #e6e9ed;
 }
 
 .vehicleunit, .caret {
@@ -51,10 +64,6 @@ ul, #generalWorksGroupsUL {
 .subwork {
     font-size: .9rem;
     font-style: italic;
-}
-
-.modal-body > .row > .col {
-    border-left: 1px solid #e6e9ed;
 }
 
 .work > div {

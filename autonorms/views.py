@@ -192,7 +192,7 @@ class AddWorkToOrder(LoginRequiredMixin, FormView):
             work_info = Work.objects.values(
                 'name', 'working_hour', 'pk',).get(pk=work_pk)
             work_info['subworks'] = tuple(SubWork.objects.values(
-                'name', 'working_hour', 'work_id').filter(work_id=work_pk))
+                'name', 'working_hour', 'pk', 'work_id').filter(work_id=work_pk))
 
         return work_info
 
