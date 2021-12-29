@@ -9,6 +9,11 @@ function getCookie(name) {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
+function checkMaxRows() {
+    let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
+    return tableRef.rows.length >= 30;
+}
+
 function change_caret() {
     this.classList.toggle('caret-down');
     let current_element = this.parentElement.querySelector('.nested');
@@ -33,6 +38,7 @@ function change_caret() {
 }
 
 function select_works() {
+    // покажу только работы относящиеся к активному узлу работ
     let pk = this.getAttribute('data-vehicleunit-pk');
 
     for (let i = 0; i < works.length; i++) {
@@ -44,6 +50,7 @@ function select_works() {
         }
     }
 
+    // выделю цветом активный узел работ
     let vehicleunits_active = document.getElementsByClassName('vehicleunit-active');
 
     for (let i = 0; i < vehicleunits_active.length; i++) {
@@ -68,6 +75,10 @@ function handler_work_selection() {
 
 // Получаю полную инфу о выбранной работе из БД сайта
 async function get_work(btn) {
+    if (checkMaxRows() & !btn.classList.contains('btn-added-work')) {
+        return;
+    }
+
     btn.classList.toggle('btn-add-work');
     btn.classList.toggle('btn-added-work');
 
@@ -104,7 +115,7 @@ function add_row(work, work_is_root) {
     let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
 
     let newRow = tableRef.insertRow();
-    newRow.insertCell(0).textContent = tableRef.rows.length;
+    newRow.insertCell(0).textContent = ''; // tableRef.rows.length;
     newRow.insertCell(1).textContent = work.name;
     newRow.insertCell(2).textContent = 1;
     newRow.insertCell(3).textContent = formatter1.format(work.working_hour) + ' н-ч';

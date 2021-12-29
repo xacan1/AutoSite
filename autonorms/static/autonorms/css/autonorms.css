@@ -81,3 +81,15 @@ ul, #generalWorksGroupsUL {
 .btn-delete-work::before {
     content: "\2613";
 }
+
+#tableOfOrder {
+    counter-reset: rowNumber;
+}
+
+#tableOfOrder tbody tr {
+    counter-increment: rowNumber;
+}
+
+#tableOfOrder tr td:first-child::before {
+    content: counter(rowNumber);
+}

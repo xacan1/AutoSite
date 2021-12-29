@@ -31,12 +31,22 @@ class LoginUser(DataMixin, auth_views.LoginView):
 class RegisterUser(DataMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'main/registration.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('registration_successful')
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(
             title='Регистрация', form_login=LoginUserForm)
+        return {**context, **c_def}
+
+
+class RegistrationSuccessful(DataMixin, FormView):
+    form_class = SimpleForm
+    template_name = 'main/success_registration.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Вы зарегистрировались!')
         return {**context, **c_def}
 
 
