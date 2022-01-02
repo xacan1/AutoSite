@@ -40,7 +40,10 @@
                                 {% if work.subworks %}
                                 <ul>
                                     {% for subwork in work.subworks %}
-                                    <li><span class="subwork">+ {{ subwork.name }}</span></li>
+                                    <li data-bs-toggle="tooltip" data-bs-placemant="bottom"
+                                        title="Дополнительная работа">
+                                        <span class="subwork">+ {{ subwork.name }}</span>
+                                    </li>
                                     {% endfor %}
                                 </ul>
                                 {% endif %}

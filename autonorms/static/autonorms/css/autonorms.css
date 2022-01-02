@@ -1,4 +1,4 @@
-
+/* тут настройки для work-order.html */
 ul, #generalWorksGroupsUL {
     list-style-type: none;
 }
@@ -92,4 +92,9 @@ ul, #generalWorksGroupsUL {
 
 #tableOfOrder tr td:first-child::before {
     content: counter(rowNumber);
+}
+
+/* тут настройки для brands.html */
+.brand-image {
+    text-align: center;
 }

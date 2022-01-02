@@ -30,7 +30,8 @@
                         {% for key, value in menu.items %}
                         {% if not user.is_authenticated and value == 'autonorms' %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'login' %}" data-bs-toggle="modal" data-bs-target="#ModalLogin">{{ key }}</a>
+                            <a class="nav-link active" aria-current="page" href="{% url 'login' %}"
+                                data-bs-toggle="modal" data-bs-target="#ModalLogin">{{ key }}</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
@@ -47,7 +48,8 @@
                         </li>
                         {% elif value == 'login' %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url value %}" data-bs-toggle="modal" data-bs-target="#ModalLogin">{{ key }}</a>
+                            <a class="nav-link active" aria-current="page" href="{% url value %}" data-bs-toggle="modal"
+                                data-bs-target="#ModalLogin">{{ key }}</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
@@ -76,13 +78,13 @@
                     {% for page_num in paginator.page_range %}
                     {% if page_num == page_obj.number %}
                     <li><strong>{{ page_num }}</strong></li>
-                    {% elif page_num >= page_obj.number|add:-2 and page_num <= page_obj.number|add:2 %} 
-                    <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
-                    {% endif %}
-                    {% endfor %}
-                    {% if page_obj.has_next %}
-                    <li><a href="?page={{ page_obj.next_page_number }}">&#11166;</a></li>
-                    {% endif %}
+                    {% elif page_num >= page_obj.number|add:-2 and page_num <= page_obj.number|add:2 %} <li><a
+                            href="?page={{ page_num }}">{{ page_num }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}">&#11166;</a></li>
+                        {% endif %}
                 </ul>
                 {% endif %}
             </div>
@@ -111,7 +113,8 @@
                     <h4>Ссылки</h4>
                     <ul>
                         {% if not user.is_authenticated %}
-                        <li><a href="{% url 'login' %}" data-bs-toggle="modal" data-bs-target="#ModalLogin">Автонормы</a></li>
+                        <li><a href="{% url 'login' %}" data-bs-toggle="modal"
+                                data-bs-target="#ModalLogin">Автонормы</a></li>
                         {% else %}
                         <li><a href="{% url 'autonorms' %}">Автонормы</a></li>
                         {% endif %}
@@ -120,11 +123,12 @@
                     </ul>
                 </div>
             </div>
-            <div class="footer-year text-center"><span>©Autonorms Online 2021</span></div>
+            <div class="footer-year text-center"><span>©Autonorms Online {% now 'Y' %}</span></div>
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 </body>
+
 </html>

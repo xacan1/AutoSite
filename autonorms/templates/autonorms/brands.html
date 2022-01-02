@@ -1,10 +1,155 @@
 {% extends 'autonorms/base.html' %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'autonorms/css/autonorms.css' %}">
 <h1>{{ title }}</h1>
-<ul>
-    {% for brand in brands %}
-    <li><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></li>
-    {% endfor %}
-</ul>
+<div class="container">
+    <div class="row">
+        {% if brands|length < 20 %}
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif brands|length < 40 %}
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter <= 20 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter > 20 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif brands|length < 60 %}
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter <= 20 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter > 20 and forloop.counter <= 40 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter > 40 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif brands|length < 80 %}
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter <= 20 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter > 20 and forloop.counter <= 40 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter > 40 and orloop.counter <= 60 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table>
+                <tbody>
+                    {% for brand in brands %}
+                    {% if forloop.counter > 60 %}
+                    <tr>
+                        <td class="brand-image"><img src="{{ STATIC_PREFIX }}/static/autonorms/images/logo/{{ brand.name }}.gif" alt="brand image"></td>
+                        <td><a href="{% url 'select_model' brand.pk %}">{{ brand.name }}</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock content %}

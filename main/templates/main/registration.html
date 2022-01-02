@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
-<form method="post">
+<form method="post" action="{% url 'registration' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button class="btn btn-primary" type="submit">Зарегистрироваться</button>

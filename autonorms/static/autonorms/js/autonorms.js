@@ -1,18 +1,12 @@
+"use strict";
 const formatter1 = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 1 });
 const formatter2 = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const cost_per_hour = parseFloat(document.getElementById('costPerHour').textContent);
+const cost_per_hour = parseFloat(document.getElementById('costPerHour').textContent.replace(/[^\d,]/g, ''));
 let works = document.getElementsByName('work');
 // let toggler_nested = document.getElementsByClassName('nested');
 
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-
-function checkMaxRows() {
-    let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
-    return tableRef.rows.length >= 30;
-}
+// обработчики выбора групп работ
+// ******************************
 
 function change_caret() {
     this.classList.toggle('caret-down');
@@ -73,36 +67,80 @@ function handler_work_selection() {
     }
 }
 
+// *******************************
+// Конец обработчика выбора групп
+
+// Обработчики таблицы заказ-наряда
+// ********************************
+
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function checkMaxRows() {
+    let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
+    return tableRef.rows.length >= 30;
+}
+
+function calculateSumOrder() {
+    let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
+    let sum_order = 0;
+
+    for (let row of tableRef.rows) {
+        sum_order += parseFloat(row.cells[4].textContent.replace(/[^\d,]/g, ''));
+    }
+
+    document.getElementById('sumOrder').textContent = formatter2.format(sum_order);
+}
+
+// ограничу ввод количества работ от 1 до 15
+function handlerInputCount() {
+    this.value = this.value.replace(/[^\d]/g, '');
+
+    if (this.value < 1) {
+        this.value = 1;
+    }
+    else if (this.value > 15) {
+        this.value = 15;
+    }
+
+    let costWorkCell = this.parentElement.parentElement.cells[4];
+    let hoursWorkCell = this.parentElement.parentElement.cells[3];
+    let hoursWork = hoursWorkCell.textContent.replace(',', '.');
+    hoursWork = hoursWork.replace(/[^\d.]/g, '');
+    costWorkCell.textContent = formatter2.format(parseFloat(hoursWork) * this.value * cost_per_hour);
+
+    calculateSumOrder();
+}
+
 // Получаю полную инфу о выбранной работе из БД сайта
 async function get_work(btn) {
     if (checkMaxRows() & !btn.classList.contains('btn-added-work')) {
-        return;
+        return; //если максимальное число строк в заказ-наряде, то нчиего не делаю
     }
 
     btn.classList.toggle('btn-add-work');
     btn.classList.toggle('btn-added-work');
 
-    let work = {
-        work_pk: btn.parentElement.parentElement.parentElement.getAttribute('data-work-pk'),
-        add: btn.classList.contains('btn-added-work')
-    };
+    if (!btn.classList.contains('btn-added-work')) {
+        delete_work(btn); // если кнопка при нажатии сменила класс на btn-add-work, то просто удалю работу из заказ-наряда
+        return;
+    }
+
+    let work = { work_pk: btn.parentElement.parentElement.parentElement.getAttribute('data-work-pk') };
     let options = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json;charset=utf-8', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCookie('csrftoken') },
         credentials: 'same-origin',
         body: JSON.stringify(work)
     };
+
     let response = await fetch('/add-work-to-order', options);
 
     if (response.ok) {
         let work_info = await response.json();
-
-        if (work.add) {
-            add_work(work_info);
-        }
-        else {
-            delete_work(btn);
-        }
+        add_work(work_info);
     }
     else {
         console.log('Ошибка HTTP: ' + response.status);
@@ -110,14 +148,33 @@ async function get_work(btn) {
 }
 
 // добавлю строку в таблицу работ
-// work_is_root - признак, что работа является корневой, а не дополнительной
-function add_row(work, work_is_root) {
+// root_work - название корневой работы если текущая работа является дополнительной
+function add_row(work, root_work = '') {
     let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
-
     let newRow = tableRef.insertRow();
+
     newRow.insertCell(0).textContent = ''; // tableRef.rows.length;
-    newRow.insertCell(1).textContent = work.name;
-    newRow.insertCell(2).textContent = 1;
+    let nameCell = newRow.insertCell(1);
+    nameCell.textContent = work.name;
+
+    if (root_work) {
+        nameCell.classList.add('subwork');
+
+        if (work.optional) {
+            nameCell.textContent = '(дополнительно) ' + work.name;
+        }
+    }
+
+    let countWorksCell = newRow.insertCell(2);
+    let inputCount = document.createElement('input');
+    inputCount.setAttribute('name', 'inputCount');
+    inputCount.setAttribute('type', 'number');
+    inputCount.setAttribute('step', '1');
+    inputCount.setAttribute('min', '1');
+    inputCount.setAttribute('max', '15');
+    inputCount.value = 1;
+    inputCount.addEventListener('input', handlerInputCount);
+    countWorksCell.appendChild(inputCount);
     newRow.insertCell(3).textContent = formatter1.format(work.working_hour) + ' н-ч';
     newRow.insertCell(4).textContent = formatter2.format(work.working_hour * cost_per_hour);
     let btnDel = document.createElement('button');
@@ -126,22 +183,27 @@ function add_row(work, work_is_root) {
     let delWorkCell = newRow.insertCell(5);
     delWorkCell.appendChild(btnDel);
 
-    if (work_is_root) {
-        delWorkCell.setAttribute('data-work-pk', work.pk);
-    }
-    else {
+    if (root_work) {
+        newRow.setAttribute('data-bs-toggle', 'tooltip');
+        newRow.setAttribute('data-bs-placemant', 'bottom');
+        newRow.setAttribute('title', 'Относится к работе: ' + root_work);
         delWorkCell.setAttribute('data-work-pk', work.work_id);
         delWorkCell.setAttribute('data-subwork-pk', work.pk);
+    }
+    else {
+        delWorkCell.setAttribute('data-work-pk', work.pk);
     }
 }
 
 //Добавляю работу в таблицу Заказ-наряда
 function add_work(work_info) {
-    add_row(work_info, true);
+    add_row(work_info);
 
     for (let subwork of work_info.subworks) {
-        add_row(subwork, false);
+        add_row(subwork, work_info.name);
     }
+
+    calculateSumOrder();
 }
 
 function delete_work(btn) {
@@ -151,6 +213,7 @@ function delete_work(btn) {
     let del_subwork_pk = btn.parentElement.getAttribute('data-subwork-pk');
     let delete_rows = [];
 
+    //удаляет работу из Заказ-наряда, если работа содержит составные работы, то удаляет и их.
     for (let row of tableRef.rows) {
         for (let cell of row.cells) {
             if (del_work_is_root & cell.getAttribute('data-work-pk') == del_work_pk) {
@@ -168,6 +231,9 @@ function delete_work(btn) {
         row.remove();
     }
 
+    calculateSumOrder();
+
+    //удаляет галочку из окна выбора путем замены класса btn-added-work на btn-add-work
     if (del_work_is_root) {
         let work_buttons = document.getElementsByClassName('btn-added-work');
 
@@ -179,6 +245,33 @@ function delete_work(btn) {
             }
         }
     }
+}
+
+let tableToExcel = (function () {
+    let uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; })
+        }
+        , downloadURI = function (uri, name) {
+            let link = document.createElement("a");
+            link.download = name;
+            link.href = uri;
+            link.click();
+        }
+
+    return function (table, name, fileName) {
+        if (!table.nodeType) table = document.getElementById(table);
+        let ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+        let resuri = uri + base64(format(template, ctx));
+        downloadURI(resuri, fileName);
+    }
+})();
+
+function saveToExcel() {
+    // params: element id, sheet name, file name
+    tableToExcel('tableOfOrder', 'Заказ-наряд', 'order.xls');
 }
 
 handler_work_selection();

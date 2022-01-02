@@ -163,7 +163,7 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
             equipment_pk, modification_pk, model_pk)
         auto_info = self.get_auto_info(equipment_pk, modification_pk, model_pk)
         c_def = self.get_user_context(
-            title='Оформление заказ-наряда', workgroups=dict_work_groups, works=all_works, auto_info=auto_info)
+            title='Заказ-наряд', workgroups=dict_work_groups, works=all_works, auto_info=auto_info)
         return {**context, **c_def}
 
     def get(self, request, *args: str, **kwargs):
@@ -186,13 +186,12 @@ class AddWorkToOrder(LoginRequiredMixin, FormView):
         work_info = {}
         serialized_data = json.loads(self.request.body)
         work_pk = serialized_data.get('work_pk', 0)
-        add = serialized_data.get('add', False)
 
-        if work_pk and add:
+        if work_pk:
             work_info = Work.objects.values(
                 'name', 'working_hour', 'pk',).get(pk=work_pk)
             work_info['subworks'] = tuple(SubWork.objects.values(
-                'name', 'working_hour', 'pk', 'work_id').filter(work_id=work_pk))
+                'name', 'working_hour', 'pk', 'work_id', 'optional').filter(work_id=work_pk))
 
         return work_info
 
