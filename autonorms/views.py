@@ -53,14 +53,13 @@ class ShowModification(LoginRequiredMixin, DataMixin, ListView):
 
     def get_context_data(self, **kwargs) -> dict:
         model_pk = self.kwargs.get('model_pk', 0)
-        current_model_name = Model.objects.get(
-            pk=model_pk).name if model_pk else ''
+        current_model = Model.objects.get(pk=model_pk) if model_pk else ''
         context = super().get_context_data(**kwargs)
         qs = context.get('object_list')
         exists_equipment = qs and Equipment.objects.filter(
             modification_id=qs[0].pk)
         c_def = self.get_user_context(
-            title='Модификации модели ' + current_model_name, exists_equipment=exists_equipment)
+            title='Модификации модели ' + current_model.name, exists_equipment=exists_equipment, brand_id=current_model.brand_id)
         return {**context, **c_def}
 
 
@@ -78,7 +77,7 @@ class ShowEquipment(LoginRequiredMixin, DataMixin, ListView):
         current_modification = Modification.objects.get(pk=modification_pk)
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(
-            title='Комплектации', modification_info=current_modification)
+            title='Комплектации', modification_info=current_modification, model_id=current_modification.model_id)
         return {**context, **c_def}
 
 

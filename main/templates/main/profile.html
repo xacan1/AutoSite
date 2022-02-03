@@ -45,5 +45,7 @@
 {% else %}
 <p>Страницы с таким профилем не найдено! <a href="{% url 'home' %}">На главную</a></p>
 {% endif %}
-<p><a href="{% url 'password_change' %}">Изменить пароль</a></p>
+<p class="badge bg-primary text-wrap fs-6">
+    <a href="{% url 'password_change' %}">Изменить пароль</a>
+</p>
 {% endblock content %}

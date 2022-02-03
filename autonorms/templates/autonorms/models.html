@@ -2,6 +2,9 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
+<p class="badge bg-primary text-wrap fs-6">
+    <a href="{% url 'autonorms' %}">&#10094; НАЗАД</a>
+</p>
 <ul>
     {% for model in models %}
     <li><a href="{% url 'select_modification' model.pk %}">{{ model.name }}</a></li>
