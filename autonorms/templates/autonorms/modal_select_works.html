@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title px-3" id="SelectWorksModalLabel">Работы</h5>
-                <input class="form-control px-3" type="text" placeholder="Поиск по работам" value="">
+                <input id="workSearch" class="form-control px-3" type="text" placeholder="Поиск по работам" value="" onkeyup="work_search(this);">
                 <button type="button" class="btn-close px-3" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body container">

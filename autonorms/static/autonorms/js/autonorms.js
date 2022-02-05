@@ -5,8 +5,44 @@ const cost_per_hour = parseFloat(document.getElementById('costPerHour').textCont
 let works = document.getElementsByName('work');
 // let toggler_nested = document.getElementsByClassName('nested');
 
+window.onbeforeunload = function () {
+    let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
+    if (tableRef.rows.length > 0) {
+        return true;
+    }
+}
+
 // обработчики выбора групп работ
 // ******************************
+
+// поиск по работам
+function work_search(inp) {
+    inp.value = inp.value.replace(/^[\s\A-z\\\-=_''""\.]+|[\s\A-z\\\-=_''""\.]+$/gi, '');
+    let search_string = inp.value.toUpperCase();
+
+    if (search_string.length < 3) {
+        return;
+    }
+
+    let works = document.querySelectorAll('#generalWorksUL > li.work');
+    let found_string;
+
+    for (let work of works) {
+        found_string = work.textContent.toUpperCase().includes(search_string);
+
+        if (found_string) {
+            work.classList.remove('hidden');
+        }
+        else {
+            work.classList.add('hidden');
+        }
+    }
+}
+
+// очищает поле поиска
+function clear_search_field() {
+    document.getElementById('workSearch').value = '';
+}
 
 function change_caret() {
     this.classList.toggle('caret-down');
@@ -23,6 +59,7 @@ function change_caret() {
     }
 
     this.classList.add('workgroup-active');
+    clear_search_field();
 
     // for (let i = 0; i < toggler_nested.length; i++) {
     //     if (toggler_nested[i] != current_element) {
@@ -52,6 +89,7 @@ function select_works() {
     }
 
     this.classList.add('vehicleunit-active');
+    clear_search_field();
 }
 
 function handler_work_selection() {
@@ -82,6 +120,14 @@ function checkMaxRows() {
     let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
     return tableRef.rows.length >= 30;
 }
+
+// если есть хоть одна строка в заказ-наряде, то спрашивать подтверждение перехода
+// function checkMinRows() {
+//     let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
+//     if (tableRef.rows.length > 0) {
+//         return confirm('Вы потеряете данные заказ наряда. Покинуть страницу?');
+//     }
+// }
 
 function calculateSumOrder() {
     let tableRef = document.getElementById('tableOfOrder').getElementsByTagName('tbody')[0];
