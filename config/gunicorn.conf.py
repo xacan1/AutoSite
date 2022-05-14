@@ -1,4 +1,4 @@
-bind = '127.0.0.1:8000'
+bind = '141.144.245.7:8000'
 workers = 3
-user = 'hasan'
+user = 'ubuntu'
 timeout = 120
