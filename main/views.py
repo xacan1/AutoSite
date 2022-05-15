@@ -58,7 +58,7 @@ class MainIndex(DataMixin, ListView):
     model = Post
     template_name = 'main/index.html'
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 3
 
     def get_queryset(self):
         return Post.objects.filter(is_published=True).order_by('-time_create')

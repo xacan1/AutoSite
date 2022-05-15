@@ -17,7 +17,7 @@
 
 <body class="d-flex flex-column h-100">
     <header>
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-primary">
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-primary fw-bold">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'home' %}">Autonorms online</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -98,15 +98,13 @@
                     <ul>
                         <li><a href="{% url 'home' %}">Главная</a></li>
                         <li><a href="{% url 'about' %}">О сайте</a></li>
-                        <li><a href="#">Размещение рекламы</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4 col-6">
                     <h4>Контакты</h4>
                     <ul>
-                        <li>8(927)777-77-77</li>
-                        <li>Мой адрес не дом и не улица</li>
-                        <li>admin@mail.ru</li>
+                        <li><a href="https://t.me/Hasan_Sm" target="_blank">telegram @Hasan_Sm</a></li>
+                        <li><a href="https://goo.gl/maps/n1RD3zZarTz55dc77" target="_blank">Адрес</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4 col-6">
@@ -118,7 +116,6 @@
                         {% else %}
                         <li><a href="{% url 'autonorms' %}">Автонормы</a></li>
                         {% endif %}
-                        <li><a href="{% url 'home' %}">Главная</a></li>
                         <li><a href="{% url 'feedback' %}">Обратная связь</a></li>
                     </ul>
                 </div>
