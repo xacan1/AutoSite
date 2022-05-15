@@ -1,7 +1,7 @@
 # from django.shortcuts import render
 # from django.http import HttpResponseNotFound
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, FormView
+from django.views.generic import ListView, DetailView, CreateView, FormView, UpdateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import CustomUser, Post
@@ -132,6 +132,20 @@ class ProfileUser(DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Профиль пользователя')
         return {**context, **c_def}
+
+
+class ProfileUserEdit(LoginRequiredMixin, DataMixin, UpdateView):
+    model = CustomUser
+    template_name = 'main/profile_edit.html'
+    pk_url_kwarg = 'user_id'
+    login_url = reverse_lazy('login')
+    success_url = reverse_lazy('home')
+    fields = ('cost_per_hour',)
+
+    # def get_context_data(self, **kwargs) -> dict:
+    #     context = super().get_context_data(**kwargs)
+    #     c_def = self.get_user_context(title='Изменить профиль')
+    #     return {**context, **c_def}
 
 
 class About(DataMixin, FormView):

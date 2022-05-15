@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/', LogoutUser.as_view(), name='logout'),
     path('profile/<int:user_id>', ProfileUser.as_view(), name='profile'),
+    path('profile_edit/<int:user_id>', ProfileUserEdit.as_view(), name='profile_edit'),
     re_path(r'^passwords/change/$', MyPasswordChangeView.as_view(),
             name='password_change'),
     re_path(r'^passwords/change/done/$',

@@ -2,7 +2,7 @@
 
 {% block content %}
 {% if user.is_authenticated and user.pk == user_data.pk %}
-<h1>Профиль пользователя: {{ user_data.email }}</h1>
+<h3>Профиль пользователя: {{ user_data.email }}</h3>
 <table class="table table-primary">
     <caption>Данные пользователя</caption>
     <thead>
@@ -40,8 +40,15 @@
             <td>ИНН</td>
             <td>{{ user_data.inn }}</td>
         </tr>
+        <tr>
+            <td>Стоимость нормочаса</td>
+            <td>{{ user_data.cost_per_hour }}</td>
+        </tr>
     </tbody>
 </table>
+<p class="badge bg-primary text-wrap fs-6">
+    <a href="{% url 'profile_edit' user_data.pk %}">Редактировать цену нормочаса</a>
+</p>
 {% else %}
 <p>Страницы с таким профилем не найдено! <a href="{% url 'home' %}">На главную</a></p>
 {% endif %}
