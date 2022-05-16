@@ -18,7 +18,7 @@ from django.urls import path, include
 from main.views import PageNotFound
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('hasan_admin/', admin.site.urls),
     path('', include('main.urls')),
     path('', include('autonorms.urls')),
 ]
