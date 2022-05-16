@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ title }}</h1>
 <p class="badge bg-primary text-wrap fs-6">
-    <a href="{% url 'select_modification' model_id %}">&#10094; НАЗАД</a>
+    <a href="{% url 'select_modification' model_id %}">❮ НАЗАД</a>
 </p>
 <h5>Модификация: {{ modification_info.name }} - {{ modification_info.year }}г. - {{ modification_info.horsepower }}л.с.
     - {{ modification_info.engine_volume }}см³ - {{ modification_info.car_body }}</h5>

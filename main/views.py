@@ -134,18 +134,17 @@ class ProfileUser(DataMixin, DetailView):
         return {**context, **c_def}
 
 
-class ProfileUserEdit(LoginRequiredMixin, DataMixin, UpdateView):
+class ProfileUserEdit(DataMixin, UpdateView):
     model = CustomUser
     template_name = 'main/profile_edit.html'
     pk_url_kwarg = 'user_id'
-    login_url = reverse_lazy('login')
     success_url = reverse_lazy('home')
-    fields = ('cost_per_hour',)
+    fields = ('inn', 'phone', 'cost_per_hour',)
 
-    # def get_context_data(self, **kwargs) -> dict:
-    #     context = super().get_context_data(**kwargs)
-    #     c_def = self.get_user_context(title='Изменить профиль')
-    #     return {**context, **c_def}
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Изменение профиля')
+        return {**context, **c_def}
 
 
 class About(DataMixin, FormView):

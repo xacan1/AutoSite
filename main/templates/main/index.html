@@ -24,11 +24,11 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
-<div class="post-list">
-    <p class="news-title">НОВОСТИ</p>
+<div style="background-color: rgb(200, 236, 248);">
+    <p class="p-2 bg-info" style="font-size: 1.5rem; font-weight: bold;">НОВОСТИ</p>
     {% for post in posts %}
-    <p class="h5 post-title"><strong><a href="{% url 'show_post' post.slug %}">{{ post.title }}</a></strong> от: {{ post.time_create }}</p>
-    <p class="post">{{ post.content|truncatewords:45 }}</p>
+    <p class="h5 px-2 text-muted"><strong><a href="{% url 'show_post' post.slug %}">{{ post.title }}</a></strong> от: {{ post.time_create }}</p>
+    <p class="px-2 py-1">{{ post.content|truncatewords:45 }}</p>
     {% endfor %}
 </div>
 {% endblock content %}

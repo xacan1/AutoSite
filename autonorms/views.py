@@ -4,8 +4,9 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views.generic import ListView, FormView
+from django.contrib.auth import views as auth_views
 import json
-from .forms import SimpleForm
+from .forms import SimpleForm, LoginUserForm
 from .models import *
 from main.mixins import DataMixin
 
@@ -171,7 +172,7 @@ class ShowWorkOrder(LoginRequiredMixin, DataMixin, FormView):
             'number_requests', 0) + 1
 
         if self.check_requests_limit():
-            return redirect('logout')
+            return redirect('logout_humanity_test')
 
         return super().get(request, *args, **kwargs)
 
@@ -194,6 +195,21 @@ class AddWorkToOrder(LoginRequiredMixin, FormView):
 
         return work_info
 
-    def post(self, request, *args: str, **kwargs):
+    def post(self, request, *args, **kwargs):
         work_info = self.get_work_info()
         return JsonResponse(work_info)
+
+
+# разлогинимся и перейдем на страницу на котрой расскажем пользователю что случилось
+class LogoutUserHumanityTest(auth_views.LogoutView):
+    next_page = 'humanity_test'
+
+
+class HumanityTest(DataMixin, auth_views.LoginView):
+    form_class = LoginUserForm
+    template_name = 'autonorms/humanity-test.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Вы не робот?')
+        return {**context, **c_def}

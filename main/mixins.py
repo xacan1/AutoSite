@@ -5,7 +5,7 @@ menu = {'На главную': 'home', 'О сайте': 'about', 'Добавит
 
 
 class DataMixin:
-    def get_user_context(self, **kwargs):
+    def get_user_context(self, **kwargs) -> dict:
         context = kwargs
         context_menu = menu.copy()
         context_user_menu = user_menu.copy()
@@ -29,10 +29,10 @@ class DataMixin:
         context['menu'] = context_menu
         return context
 
-    def check_requests_limit(self):
+    def check_requests_limit(self) -> bool:
         result = False
-        print(
-            f"{self.request.user.email} ip: {self.request.META.get('REMOTE_ADDR')}: {self.request.session['number_requests']} request in {self.request.user.request_limit}")
+        # print(
+        #     f"{self.request.user.email} ip: {self.request.META.get('REMOTE_ADDR')}: {self.request.session['number_requests']} request in {self.request.user.request_limit}")
 
         if self.request.session['number_requests'] > self.request.user.request_limit:
             self.request.session['number_requests'] = 0

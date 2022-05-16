@@ -1,0 +1,17 @@
+{% extends 'autonorms/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<div>
+    <h5>
+        Через определенное время сайт проверяет является ли пользователь живым человеком. Для проверки, что вы не робот,
+        залогиньтесь на сайт ещё раз. Приносим изменения за неудобства.
+    </h5>
+</div>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Войти</button>
+</form>
+<p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+{% endblock content %}

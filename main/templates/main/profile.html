@@ -29,10 +29,6 @@
             <td>{{ user_data.last_login }}</td>
         </tr>
         <tr>
-            <td>Имя</td>
-            <td>{{ user_data.first_name }} {{ user_data.last_name }}</td>
-        </tr>
-        <tr>
             <td>Дата регистрации</td>
             <td>{{ user_data.date_joined }}</td>
         </tr>
@@ -47,7 +43,7 @@
     </tbody>
 </table>
 <p class="badge bg-primary text-wrap fs-6">
-    <a href="{% url 'profile_edit' user_data.pk %}">Редактировать цену нормочаса</a>
+    <a href="{% url 'profile_edit' user_data.pk %}">Редактировать профиль</a>
 </p>
 {% else %}
 <p>Страницы с таким профилем не найдено! <a href="{% url 'home' %}">На главную</a></p>
