@@ -24,7 +24,7 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
-<div style="background-color: rgb(200, 236, 248);">
+<div class="chapter-color">
     <p class="p-2 bg-info" style="font-size: 1.5rem; font-weight: bold;">НОВОСТИ</p>
     {% for post in posts %}
     <p class="h5 px-2 text-muted"><strong><a href="{% url 'show_post' post.slug %}">{{ post.title }}</a></strong> от: {{ post.time_create }}</p>

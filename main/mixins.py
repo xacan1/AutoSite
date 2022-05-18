@@ -1,7 +1,7 @@
 user_menu = {'Войти': 'login',
              'Регистрация': 'registration', 'Выйти': 'logout'}
-menu = {'На главную': 'home', 'О сайте': 'about', 'Добавить новость': 'add_post',
-        'Обратная связь': 'feedback', 'Автонормы': 'autonorms'}
+menu = {'На главную': 'home', 'Возможности': 'features', 'О сайте': 'about',
+        'Добавить новость': 'add_post', 'Обратная связь': 'feedback', 'Автонормы': 'autonorms'}
 
 
 class DataMixin:

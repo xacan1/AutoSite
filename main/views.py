@@ -163,6 +163,17 @@ class About(DataMixin, FormView):
         return {**context, **c_def}
 
 
+class Features(DataMixin, FormView):
+    form_class = SimpleForm
+    template_name = 'main/features.html'
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(
+            title='Возможности', form_login=LoginUserForm)
+        return {**context, **c_def}
+
+
 class MyPasswordResetView(DataMixin, auth_views.PasswordResetView):
     template_name = 'main/password_reset.html'
 
