@@ -71,7 +71,8 @@ class MainIndex(DataMixin, ListView):
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(
-            title='Автонормы', form_login=LoginUserForm)
+            title='Автонормы - бесплатная база норм времени',
+            form_login=LoginUserForm)
         return {**context, **c_def}
 
 
