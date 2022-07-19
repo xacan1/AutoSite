@@ -3,45 +3,65 @@
 
 {% block content %}
 <link type="text/css" rel="stylesheet" href="{% static 'autonorms/css/autonorms.css' %}">
-<h1>{{ title }} на сумму <span id="sumOrder">0,00</span></h1>
-<div class="work-order pt-1">
-    <div class="container p-0">
-        <div class="row fw-light">
-            <div class="col-7">
-                <p>Марка: <span class="fw-bolder">{{ auto_info.brand }}</span> Модель: <span class="fw-bolder">{{ auto_info.model }}</span></p>
-                <p>Модификация: <span class="fw-bolder">{{ auto_info.modification }} {{ auto_info.equipment }}</span></p>
-            </div>
-            <div class="col-3">
-                <p><span>Организация: </span><span class="company fw-bolder">{{ user.company }}</span></p>
-                <p><span>Стоимость н-ч: </span><span id="costPerHour" class="fw-bolder">{{ user.cost_per_hour|floatformat:"2g" }}</span></p>
-                <!-- <p><span>Общая сумма: </span><span id="sumOrder" class="fw-bolder"></span></p> -->
-            </div>
-            <div class="col-2">
-                <div>
-                    <button class="btn btn-primary" onclick="saveToExcel();">Сохранить в Excel</button>
+<section class="hero-area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-12 col-12">
+                <div class="hero-content1 py-5">
+                    
                 </div>
             </div>
         </div>
     </div>
-    <table id="tableOfOrder" class="table table-hover align-middle">
-        <caption>Калькуляция работ</caption>
-        <thead>
-            <tr>
-                <th>№ п/п</th>
-                <th>Работа</th>
-                <th>Кол-во</th>
-                <th>Время</th>
-                <th>Стоимость</th>
-                <th>Удалить</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
+</section>
 {% include 'autonorms/modal_select_works.html' %}
-<div class="py-1">
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalSelectWorks">Добавить работу</button>
-</div>
-<script src="{% static 'autonorms/js/autonorms.js' %}"></script>
+<section class="services py-2">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 col-md-12 col-12">
+                <h3>{{ title }} на сумму <span id="sumOrder">0,00</span></h3>
+                <div class="work-order pt-1">
+                    <!-- <div class="container p-0"> -->
+                        <div class="row fw-light">
+                            <div class="col-7">
+                                <p>Марка: <span class="fw-bolder">{{ auto_info.brand }}</span> Модель: <span class="fw-bolder">{{ auto_info.model }}</span></p>
+                                <p>Модификация: <span class="fw-bolder">{{ auto_info.modification }} {{ auto_info.equipment }}</span></p>
+                            </div>
+                            <div class="col-3">
+                                <p><span>Организация: </span><span class="company fw-bolder">{{ user.company }}</span></p>
+                                <p><span>Стоимость н-ч: </span><span id="costPerHour" class="fw-bolder">{{ user.cost_per_hour|floatformat:"2g" }}</span></p>
+                                <!-- <p><span>Общая сумма: </span><span id="sumOrder" class="fw-bolder"></span></p> -->
+                            </div>
+                            <div class="col-2">
+                                <div class="py-2">
+                                    <button class="btn btn-success" onclick="saveToExcel();">
+                                        <img src="{% static 'autonorms/images/excel.png' %}" alt="excel" style="height: 32px;width: 26px;"> Сохранить в Excel</button>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
+                    <table id="tableOfOrder" class="table table-hover align-middle">
+                        <caption>Калькуляция работ</caption>
+                        <thead>
+                            <tr>
+                                <th>№ п/п</th>
+                                <th>Работа</th>
+                                <th>Кол-во</th>
+                                <th>Время</th>
+                                <th>Стоимость</th>
+                                <th>Удалить</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="py-1">
+                    <button class="autobtn-alt" data-bs-toggle="modal" data-bs-target="#ModalSelectWorks">Добавить работу</button>
+                </div>
+                <script src="{% static 'autonorms/js/autonorms.js' %}"></script>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock content %}

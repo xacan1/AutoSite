@@ -1,54 +1,71 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-{% if user.is_authenticated and user.pk == user_data.pk %}
-<h3>Профиль пользователя: {{ user_data.email }}</h3>
-<table class="table table-primary">
-    <caption>Данные пользователя</caption>
-    <thead>
-        <tr>
-            <th>Параметр</th>
-            <th>Значение</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Email</td>
-            <td>{{ user_data.email }}</td>
-        </tr>
-        <tr>
-            <td>Организация</td>
-            <td>{{ user_data.company }}</td>
-        </tr>
-        <tr>
-            <td>Телефон</td>
-            <td>{{ user_data.phone }}</td>
-        </tr>
-        <tr>
-            <td>Последнее посещение</td>
-            <td>{{ user_data.last_login }}</td>
-        </tr>
-        <tr>
-            <td>Дата регистрации</td>
-            <td>{{ user_data.date_joined }}</td>
-        </tr>
-        <tr>
-            <td>ИНН</td>
-            <td>{{ user_data.inn }}</td>
-        </tr>
-        <tr>
-            <td>Стоимость нормочаса</td>
-            <td>{{ user_data.cost_per_hour }}</td>
-        </tr>
-    </tbody>
-</table>
-<p class="badge bg-primary text-wrap fs-6">
-    <a href="{% url 'profile_edit' user_data.pk %}">Редактировать профиль</a>
-</p>
-{% else %}
-<p>Страницы с таким профилем не найдено! <a href="{% url 'home' %}">На главную</a></p>
-{% endif %}
-<p class="badge bg-primary text-wrap fs-6">
-    <a href="{% url 'password_change' %}">Изменить пароль</a>
-</p>
+<section class="hero-area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-12 col-12">
+                <div class="hero-content">
+                    <h1>Профиль пользователя: {{ user_data.email }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="services section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 col-md-12 col-12">
+                {% if user.is_authenticated and user.pk == user_data.pk %}
+                <table class="table">
+                    <!-- <caption>Данные пользователя</caption> -->
+                    <thead>
+                        <tr>
+                            <th>Параметр</th>
+                            <th>Значение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ user_data.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Организация</td>
+                            <td>{{ user_data.company }}</td>
+                        </tr>
+                        <tr>
+                            <td>Телефон</td>
+                            <td>{{ user_data.phone }}</td>
+                        </tr>
+                        <tr>
+                            <td>Последнее посещение</td>
+                            <td>{{ user_data.last_login }}</td>
+                        </tr>
+                        <tr>
+                            <td>Дата регистрации</td>
+                            <td>{{ user_data.date_joined }}</td>
+                        </tr>
+                        <tr>
+                            <td>ИНН</td>
+                            <td>{{ user_data.inn }}</td>
+                        </tr>
+                        <tr>
+                            <td>Стоимость нормочаса</td>
+                            <td>{{ user_data.cost_per_hour }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="button wow fadeInUp badge" data-wow-delay=".8s">
+                    <a href="{% url 'profile_edit' user_data.pk %}" class="btn">Редактировать профиль</a>
+                </div>
+                {% else %}
+                <p>Страницы с таким профилем не найдено! <a href="{% url 'home' %}">На главную</a></p>
+                {% endif %}
+                <div class="button wow fadeInUp badge" data-wow-delay=".8s">
+                    <a href="{% url 'password_change' %}" class="btn">Изменить пароль</a>
+                </div>
+            </div>
+        </div>
+</section>
 {% endblock content %}

@@ -1,13 +1,32 @@
 {% extends 'autonorms/base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<p class="badge bg-primary text-wrap fs-6">
-    <a href="{% url 'autonorms' %}">❮ НАЗАД</a>
-</p>
-<ul>
-    {% for model in models %}
-    <li><a href="{% url 'select_modification' model.pk %}">{{ model.name }}</a></li>
-    {% endfor %}
-</ul>
+<section class="hero-area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-12 col-12">
+                <div class="py-5">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="services py-2">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-12 col-12">
+                <h4>{{ title }}</h4>
+                <div class="button wow fadeInUp py-2">
+                    <a href="{% url 'autonorms' %}" class="btn">❮ НАЗАД</a>
+                </div>
+                <ul>
+                    {% for model in models %}
+                    <li><a href="{% url 'select_modification' model.pk %}">{{ model.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+</section>
 {% endblock content %}

@@ -2,62 +2,88 @@
 {% load static %}
 
 {% block content %}
-<div class="row">
-    <h1 class="text-center p-3 bg-info">{{ title }}</h1>
-</div>
-<div class="p-3"></div>
-<div class="row">
-    <div class="col-md-6 chapter-color p-4">
-        <h3 class="text-center">Нормы времени</h3>
-        <div>
-            <p>На сайте представлена онлайн база норм времени на ремонт автомобилей. Данные являются переработанной
-                версией WorkshopData, известным по всему Миру поставщиком цифровых данных о транспортных средствах.
-            </p>
+<section class="hero-area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-12 col-12">
+                <div class="hero-content">
+                    <h1>{{ title }}</h1>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-6 chapter-color p-4">
-        <img class="w-100 scale" src="{% static 'main\images\normohours-example.jpg' %}" alt="example-normohours">
-    </div>
+</section>
+<section class="services section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-12 col-12">
 
-    <div class="p-3"></div>
+                <div class="p-3"></div>
+                <div class="row">
+                    <div class="col-md-6 p-4">
+                        <h4 class="text-center">Нормы времени</h4>
+                        <div>
+                            <p>На сайте представлена онлайн база норм времени на ремонт автомобилей. Данные являются
+                                переработанной
+                                версией WorkshopData, известным по всему Миру поставщиком цифровых данных о транспортных
+                                средствах.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 chapter-color p-4">
+                        <img class="w-100 scale" src="{% static 'main\images\normohours-example.jpg' %}"
+                            alt="example-normohours">
+                    </div>
 
-    <div class="col-md-6 chapter-color p-4">
-        <h3 class="text-center">Заказ-наряд</h3>
-        <div>
-            <p>
-                Актуальные данные для расчета стоимости ремонта позволят составить калькуляцию на ремонт автомобиля.
-            </p>
-            <p>
-                В личном кабинете можно указать свою стоимость нормочаса и программа будет использовать именно его в
-                калькуляции.
-            </p>
-            <p>
-                Так же есть возможность выгрузить калькуляцию в Excel и в дальнейшем загрузить её в учетную программу,
-                например 1С.
-            </p>
+                    <div class="p-3"></div>
+
+                    <div class="col-md-6 chapter-color p-4">
+                        <h4 class="text-center">Заказ-наряд</h4>
+                        <div>
+                            <p>
+                                Актуальные данные для расчета стоимости ремонта позволят составить калькуляцию на ремонт
+                                автомобиля.
+                            </p>
+                            <p>
+                                В личном кабинете можно указать свою стоимость нормочаса и программа будет использовать
+                                именно его в
+                                калькуляции.
+                            </p>
+                            <p>
+                                Так же есть возможность выгрузить калькуляцию в Excel и в дальнейшем загрузить её в
+                                учетную программу,
+                                например 1С.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 chapter-color p-4">
+                        <img class="w-100 scale" src="{% static 'main\images\zakaz-naryad-example.jpg' %}"
+                            alt="example-zakaz-naryad">
+                    </div>
+
+                    <div class="p-3"></div>
+
+                    <div class="col-md-6 chapter-color p-4">
+                        <h4 class="text-center">Подбор работ</h4>
+                        <div>
+                            <p>
+                                Быстрый и удобный подбор работ. Скорость обслуживания имеет значение, клиент не любит
+                                ждать. На сайте
+                                все автомобили удобно сгруппированы по маркам, моделям, модификациям. Сами работы
+                                сгруппированы по
+                                группам и узлам для быстрой навигации.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 chapter-color p-4">
+                        <img class="w-100 scale" src="{% static 'main\images\works-example.jpg' %}"
+                            alt="example-normohours">
+                    </div>
+
+                    <div class="p-3"></div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-6 chapter-color p-4">
-        <img class="w-100 scale" src="{% static 'main\images\zakaz-naryad-example.jpg' %}" alt="example-zakaz-naryad">
-    </div>
-
-    <div class="p-3"></div>
-
-    <div class="col-md-6 chapter-color p-4">
-        <h3 class="text-center">Подбор работ</h3>
-        <div>
-            <p>
-                Быстрый и удобный подбор работ. Скорость обслуживания имеет значение, клиент не любит ждать. На сайте
-                все автомобили удобно сгруппированы по маркам, моделям, модификациям. Сами работы сгруппированы по
-                группам и узлам для быстрой навигации.
-            </p>
-        </div>
-    </div>
-    <div class="col-md-6 chapter-color p-4">
-        <img class="w-100 scale" src="{% static 'main\images\works-example.jpg' %}" alt="example-normohours">
-    </div>
-
-    <div class="p-3"></div>
-</div>
-
+</section>
 {% endblock content %}

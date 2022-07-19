@@ -1,10 +1,28 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<form method="post" action="{% url 'registration' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
-</form>
+<section class="hero-area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-12 col-12">
+                <div class="hero-content">
+                    <h1>{{ title }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="services section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-12 col-12">
+                <form method="post" action="{% url 'registration' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="autobtn" type="submit">Зарегистрироваться</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock content %}

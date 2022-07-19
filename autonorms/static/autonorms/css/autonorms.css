@@ -53,6 +53,10 @@ ul, #generalWorksGroupsUL {
     background-color: rgb(220, 221, 230);
 }
 
+.vehicleunit {
+    margin: 0 0 0 1rem;
+}
+
 .workgroup:hover, .vehicleunit:hover {
     color: brown;
     text-decoration: underline;

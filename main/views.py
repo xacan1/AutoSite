@@ -59,14 +59,9 @@ class LogoutUser(auth_views.LogoutView):
     next_page = 'home'
 
 
-class MainIndex(DataMixin, ListView):
-    model = Post
+class MainIndex(DataMixin, FormView):
+    form_class = SimpleForm
     template_name = 'main/index.html'
-    context_object_name = 'posts'
-    paginate_by = 3
-
-    def get_queryset(self):
-        return Post.objects.filter(is_published=True).order_by('-time_create')
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)

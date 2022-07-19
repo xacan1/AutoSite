@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" class="h-100">
+<html lang="ru" class="h-100 no-js">
 
 {% load static %}
 
@@ -19,129 +19,166 @@
 
 <body class="d-flex flex-column h-100">
     <!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
-        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-    
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+            m[i].l = 1 * new Date(); k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
         ym(88810756, "init", {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true
         });
     </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/88810756" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/88810756" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
     <!-- /Yandex.Metrika counter -->
-    <header>
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-primary fw-bold">
-            <div class="container">
-                <a class="navbar-brand" href="{% url 'home' %}">Autonorms online</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        {% for key, value in menu.items %}
-                        {% if not user.is_authenticated and value == 'autonorms' %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'login' %}"
-                                data-bs-toggle="modal" data-bs-target="#ModalLogin">{{ key }}</a>
-                        </li>
-                        {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url value %}">{{ key }}</a>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        {% for key, value in user_menu.items %}
-                        {% if user.is_authenticated and user.email == key %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'profile' user.pk %}">{{ key }}</a>
-                        </li>
-                        {% elif value == 'login' %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url value %}" data-bs-toggle="modal"
-                                data-bs-target="#ModalLogin">{{ key }}</a>
-                        </li>
-                        {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url value %}">{{ key }}</a>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
+    <header class="header navbar-area">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <div class="nav-inner">
+                        <!-- Start Navbar -->
+                        <nav class="navbar navbar-expand-lg">
+                            <a class="navbar-brand" href="{% url 'home' %}">
+                                <img src="{% static 'main/images/logo.svg' %}" alt="Logo">
+                            </a>
+                            <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                                <ul class="navbar-nav ms-auto">
+                                    {% for key, value in menu.items %}
+                                    {% if not user.is_authenticated and value == 'autonorms' %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-label="Toggle navigation" href="{% url 'login' %}"
+                                            data-bs-toggle="modal" data-bs-target="#ModalLogin">{{ key }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-label="Toggle navigation" 
+                                            href="{% url value %}">{{ key }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+                                </ul>
+
+                                <ul class="navbar-nav ms-auto">
+                                    {% for key, value in user_menu.items %}
+                                    {% if user.is_authenticated and user.email == key %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-label="Toggle navigation"
+                                            href="{% url 'profile' user.pk %}">{{ key }}</a>
+                                    </li>
+                                    {% elif value == 'login' %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-label="Toggle navigation" href="{% url value %}"
+                                            data-bs-toggle="modal" data-bs-target="#ModalLogin">{{ key }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-label="Toggle navigation" href="{% url value %}">{{ key }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div> <!-- navbar collapse -->
+                        </nav>
+                        <!-- End Navbar -->
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </div> <!-- row -->
+        </div> <!-- container -->
     </header>
     {% include 'main/modal_login.html' %}
+
     <main>
-        <div class="container px-2">
-            {% block content %}
-            {% endblock content %}
-        </div>
-        <nav>
-            <div class="container">
-                {% if page_obj.has_other_pages %}
-                <ul>
-                    {% if page_obj.has_previous %}
-                    <li><a href="?page={{ page_obj.previous_page_number }}">&#11164;</a></li>
-                    {% endif %}
-                    {% for page_num in paginator.page_range %}
-                    {% if page_num == page_obj.number %}
-                    <li><strong>{{ page_num }}</strong></li>
-                    {% elif page_num >= page_obj.number|add:-2 and page_num <= page_obj.number|add:2 %} <li><a
-                            href="?page={{ page_num }}">{{ page_num }}</a></li>
-                        {% endif %}
-                        {% endfor %}
-                        {% if page_obj.has_next %}
-                        <li><a href="?page={{ page_obj.next_page_number }}">&#11166;</a></li>
-                        {% endif %}
-                </ul>
-                {% endif %}
-            </div>
-        </nav>
+        {% block content %}
+        {% endblock content %}
     </main>
-    <footer class="footer mt-auto py-3 bg-primary">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-6">
-                    <h4>Информация</h4>
-                    <ul>
-                        <li><a href="{% url 'home' %}">Главная</a></li>
-                        <li><a href="{% url 'about' %}">О сайте</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4 col-6">
-                    <h4>Контакты</h4>
-                    <ul>
-                        <li><a href="https://t.me/Hasan_Sm" target="_blank">telegram @Hasan_Sm</a></li>
-                        <li><a href="https://goo.gl/maps/n1RD3zZarTz55dc77" target="_blank">Адрес</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4 col-6">
-                    <h4>Ссылки</h4>
-                    <ul>
-                        {% if not user.is_authenticated %}
-                        <li><a href="{% url 'login' %}" data-bs-toggle="modal"
-                                data-bs-target="#ModalLogin">Автонормы</a></li>
-                        {% else %}
-                        <li><a href="{% url 'autonorms' %}">Автонормы</a></li>
-                        {% endif %}
-                        <li><a href="{% url 'feedback' %}">Обратная связь</a></li>
-                    </ul>
+
+    <footer class="footer section">
+        <!-- Start Footer Top -->
+        <div class="footer-top">
+            <div class="container">
+                <div class="inner-content">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <!-- Single Widget -->
+                            <div class="single-footer f-about">
+                                <div class="logo">
+                                    <a href="{% url 'home' %}">
+                                        <img src="{% static 'main/images/logo.svg' %}" alt="#">
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- End Single Widget -->
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <!-- Single Widget -->
+                            <div class="single-footer f-link">
+                                <h3>ИНФОРМАЦИЯ</h3>
+                                <ul>
+                                    <li><a href="{% url 'home' %}">Главная</a></li>
+                                    <li><a href="{% url 'about' %}">О сайте</a></li>
+                                </ul>
+                            </div>
+                            <!-- End Single Widget -->
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <!-- Single Widget -->
+                            <div class="single-footer f-link">
+                                <h3>КОНТАКТЫ</h3>
+                                <ul>
+                                    <li><a href="https://t.me/Hasan_Sm" target="_blank">telegram @Hasan_Sm</a></li>
+                                    <li><a href="https://goo.gl/maps/n1RD3zZarTz55dc77" target="_blank">Адрес</a></li>  
+                                </ul>
+                            </div>
+                            <!-- End Single Widget -->
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <!-- Single Widget -->
+                            <div class="single-footer f-link">
+                                <h3>ССЫЛКИ</h3>
+                                <ul>
+                                    <li><a href="{% url 'login' %}">Автонормы</a></li>
+                                    <li><a href="{% url 'feedback' %}">Обратная связь</a></li>
+                                </ul>
+                            </div>
+                            <!-- End Single Widget -->
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="footer-year text-center"><span>©Autonorms Online {% now 'Y' %}</span></div>
         </div>
+        <!--/ End Footer Top -->
+        <!-- Start Copyright Area -->
+        <div class="copyright-area">
+            <div class="container">
+                <div class="inner-content">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <p class="copyright-text">©Autonorms Online {% now 'Y' %}</p>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <p class="copyright-owner">Designed and Developed by GrayGrids and Hasan Smirnov</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Copyright Area -->
     </footer>
+    <script src="{% static 'main/js/main.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 </body>
-
 </html>
