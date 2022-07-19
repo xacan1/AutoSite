@@ -50,7 +50,7 @@ class LoginUserForm(AuthenticationForm):
         label='Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password = forms.CharField(
         label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    # captcha = ReCaptchaField()
+    captcha = ReCaptchaField()
     # fields = ('email', 'password')
     # widgets = {'email': forms.EmailInput(attrs={'class': 'form-input'}),
     #            'password': forms.PasswordInput(attrs={'class': 'form-input'})}
