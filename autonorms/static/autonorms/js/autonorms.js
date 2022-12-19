@@ -154,7 +154,7 @@ function handlerInputCount() {
     let costWorkCell = this.parentElement.parentElement.cells[4];
     let hoursWorkCell = this.parentElement.parentElement.cells[3];
     let hoursWork = hoursWorkCell.textContent.replace(',', '.');
-    hoursWork = hoursWork.replace(/[^\d.]/g, '');
+    hoursWork = hoursWork.replace(/[^\d.,]/g, '');
     costWorkCell.textContent = formatter2.format(parseFloat(hoursWork) * this.value * cost_per_hour);
 
     calculateSumOrder();

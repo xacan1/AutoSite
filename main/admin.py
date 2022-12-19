@@ -6,7 +6,7 @@ from .models import CustomUser, Post
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ('email', 'company', 'inn', 'phone', 'date_joined', 'request_limit', 'cost_per_hour', 'is_staff', 'is_active')
-    list_filter = ('email', 'company', 'inn', 'phone', 'date_joined', 'is_staff', 'is_active')
+    list_filter = ('date_joined', 'is_staff', 'is_active')
     list_editable = ('is_active',)
     list_display_links = ('email', 'company', 'inn', 'phone')
     fieldsets = (
