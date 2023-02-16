@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Post
+from main.models import CustomUser, Post
 
 
 class CustomUserAdmin(UserAdmin):
@@ -34,3 +34,5 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.site_header = 'Панель администартора Auto-norms'
+admin.site.site_title = 'Панель администратора'

@@ -75,7 +75,7 @@
                                     {% if user.is_authenticated and user.email == key %}
                                     <li class="nav-item">
                                         <a class="nav-link active" aria-label="Toggle navigation"
-                                            href="{% url 'profile' user.pk %}">{{ key }}</a>
+                                            href="{% url 'profile' user.pk %}">Профиль пользователя</a>
                                     </li>
                                     {% elif value == 'login' %}
                                     <li class="nav-item">

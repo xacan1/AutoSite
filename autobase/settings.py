@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-from . import config
+from autobase import config
 
 try:
-    from .local_settings import *
+    from autobase.local_settings import *
 except ImportError:
-    from .prod_settings import *
+    from autobase.prod_settings import *
 
 # my comment
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'autobase.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

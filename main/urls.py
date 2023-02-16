@@ -1,5 +1,6 @@
 from django.urls import path, re_path
-from .views import *
+from main.views import *
+from autobase import config
 
 urlpatterns = [
     path('', MainIndex.as_view(), name='home'),
@@ -27,4 +28,6 @@ urlpatterns = [
             MyPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     re_path(r'^passwords/reset/complete/$',
             MyPasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    # Тут перехватываю url логина в админку что бы направить на форму с капчей
+    path(f'{config.URL_ADMIN}/login/', MyAdminLoginView.as_view()),
 ]

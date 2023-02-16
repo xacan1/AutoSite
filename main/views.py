@@ -4,9 +4,9 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView, UpdateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import CustomUser, Post
-from .forms import AddPostForm, RegisterUserForm, FeedbackForm, LoginUserForm, SimpleForm
-from .mixins import DataMixin
+from main.models import CustomUser, Post
+from main.forms import AddPostForm, RegisterUserForm, FeedbackForm, LoginUserForm, ProfileUserEditForm, PasswordChangeForm, SimpleForm
+from main.mixins import DataMixin
 
 
 class PageNotFound(FormView):
@@ -136,11 +136,12 @@ class ProfileUser(DataMixin, DetailView):
 
 
 class ProfileUserEdit(DataMixin, UpdateView):
+    form_class = ProfileUserEditForm
     model = CustomUser
     template_name = 'main/profile_edit.html'
     pk_url_kwarg = 'user_id'
-    success_url = reverse_lazy('home')
-    fields = ('inn', 'phone', 'cost_per_hour',)
+    success_url = reverse_lazy('autonorms')
+    # fields = ('phone', 'cost_per_hour',)
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
@@ -181,6 +182,7 @@ class MyPasswordResetView(DataMixin, auth_views.PasswordResetView):
 
 
 class MyPasswordChangeView(DataMixin, auth_views.PasswordChangeView):
+    form_class = PasswordChangeForm
     template_name = 'main/password_change.html'
 
     def get_context_data(self, **kwargs) -> dict:
@@ -226,3 +228,12 @@ class MyPasswordResetCompleteView(DataMixin, auth_views.PasswordResetCompleteVie
         c_def = self.get_user_context(
             title='Восстановление пароля завершено', form_login=LoginUserForm)
         return {**context, **c_def}
+
+
+# форма регистрации через админку с капчей
+class MyAdminLoginView(auth_views.LoginView):
+    # тут интересно, что шаблон находится вовсе не в этом приложении, до его поиска просто не доходит очередь
+    # так как в settings указано, что сначала ищем все шаблоны в корне приложения: 'DIRS': [BASE_DIR / 'templates'],
+    # по этому admin/login.html - это путь от корня проекта
+    template_name = 'admin/login.html'
+    form_class = LoginUserForm

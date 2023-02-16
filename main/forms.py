@@ -1,6 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import CustomUser, Post
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from main.models import CustomUser, Post
 from captcha.fields import ReCaptchaField
 
 
@@ -31,18 +31,21 @@ class AddPostForm(forms.ModelForm):
 
 class RegisterUserForm(UserCreationForm):
     password1 = forms.CharField(
+        label='Пароль',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(
+        label='Повторите пароль',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    captcha = ReCaptchaField()
+    # captcha = ReCaptchaField()
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'company', 'inn', 'phone')
-        widgets = {'email': forms.EmailInput(attrs={'class': 'form-control'}),
-                   'company': forms.TextInput(attrs={'class': 'form-control'}),
-                   'inn': forms.TextInput(attrs={'class': 'form-control'}),
-                   'phone': forms.TextInput(attrs={'class': 'form-control'})}
+        fields = ('email', 'company', 'phone',)
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'company': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'})
+        }
 
 
 class LoginUserForm(AuthenticationForm):
@@ -50,7 +53,26 @@ class LoginUserForm(AuthenticationForm):
         label='Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password = forms.CharField(
         label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    captcha = ReCaptchaField()
-    # fields = ('email', 'password')
-    # widgets = {'email': forms.EmailInput(attrs={'class': 'form-input'}),
-    #            'password': forms.PasswordInput(attrs={'class': 'form-input'})}
+    # captcha = ReCaptchaField()
+
+
+class ProfileUserEditForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('phone', 'cost_per_hour',)
+        widgets = {
+            'cost_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+
+class PasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label='Старый пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    new_password1 = forms.CharField(
+        label='Новый пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    new_password2 = forms.CharField(
+        label='Повторите новый пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
