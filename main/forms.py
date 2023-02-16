@@ -36,7 +36,7 @@ class RegisterUserForm(UserCreationForm):
     password2 = forms.CharField(
         label='Повторите пароль',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    # captcha = ReCaptchaField()
+    captcha = ReCaptchaField()
 
     class Meta:
         model = CustomUser
@@ -53,7 +53,7 @@ class LoginUserForm(AuthenticationForm):
         label='Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password = forms.CharField(
         label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    # captcha = ReCaptchaField()
+    captcha = ReCaptchaField()
 
 
 class ProfileUserEditForm(forms.ModelForm):
